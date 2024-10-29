@@ -1,6 +1,9 @@
 import streamlit as st
 
-st.title("🎈 My new app")
+st.title("Youtify 🎵")
 st.write(
-    "Let's start building! For help and inspiration, head over to [docs.streamlit.io](https://docs.streamlit.io/)."
+    "Convert your favorite YouTube music videos to Spotify playlists!"
 )
+
+# Get the YouTube URL from the user
+youtube_url = st.text_input("Enter the YouTube URL:")
