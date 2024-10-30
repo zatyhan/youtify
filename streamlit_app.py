@@ -2,6 +2,11 @@ import streamlit as st
 from helpers import Processor, PlaylistMaker
 import webbrowser
 
+
+def redirect(url):
+    js = f'window.open("{url}", "_self");'
+    st.components.v1.html(f'<script>{js}</script>', height=0)
+    
 st.title("Youtify 🎵")
 st.write(
     "Convert your favorite YouTube music videos to Spotify playlists!"
@@ -21,11 +26,9 @@ if button:
     if 'sp' not in st.session_state:
         auth_url = playlist.authenticate()
         # webbrowser.open(url=st.session_state.auth_url)
-        st.markdown(f'<meta http-equiv="refresh" content="0; url={auth_url}">',  unsafe_allow_html=True)
-
-        print('User has been successfully authenticated')
-        print(st.query_params)
-
+        # st.markdown(f'<meta http-equiv="refresh" content="0; url={auth_url}">',  unsafe_allow_html=True)
+        redirect(auth_url)
+        
     else: 
         sp= st.session_state.sp
         user_info = sp.me()
@@ -37,7 +40,7 @@ if button:
         st.write('Successfully created playlist')
 
     else: 
-        st.write('Something went wrong.')
+        st.write('Did not pass authentication')
         raise SystemExit
 
 
