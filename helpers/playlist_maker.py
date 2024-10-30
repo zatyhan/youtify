@@ -2,6 +2,9 @@ import spotipy
 from spotipy.oauth2 import SpotifyPKCE
 from dotenv import load_dotenv
 import os
+import json
+import requests
+from urllib.parse import urlencode
 
 class PlaylistMaker():
     def __init__(self, name):
@@ -14,12 +17,8 @@ class PlaylistMaker():
         self.user_id= self.__sp__.me()['id']
         self.playlist_id = self.__sp__.user_playlist_create(self.user_id, self.playlist_name)['id'] #add template for description later
 
-    def lookup(self, track_name, artist_name, album=None):
-        if album is None:
-            query= f"q=remaster%20track:{track_name.replace(' ', '%20')}%20artist:{artist_name.replace(' ', '%20')}"
-        else:
-            query= f"q=remaster%20track:{track_name.replace(' ', '%20')}%20artist:{artist_name.replace(' ', '%20')}%20album:{album.replace(' ', '%20')}"
-        # print(query)
+    def lookup(self, isrc):
+        query= f"isrc:{isrc}"
         results = self.__sp__.search(query, type="track")
         track_id= results['tracks']['items'][0]['id']
         duration= results['tracks']['items'][0]['duration_ms']/1000
@@ -28,10 +27,3 @@ class PlaylistMaker():
 
     def add_to_playlist(self, track_id):
         self.__sp__.user_playlist_add_tracks(self.user_id, self.playlist_id, [track_id])
-        # print(self.__sp__.user_playlist_tracks(self.user_id, self.playlist_id))
-
-# pm= PlaylistMaker('test 2')
-# track_id,  duration = pm.lookup('Supernatural', 'NewJeans')
-# pm.add_to_playlist(track_id)
-# track_id,  duration = pm.lookup('Berharap Kau Kembali', 'Fabio Asher')
-# pm.add_to_playlist(track_id)

@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from pytubefix import YouTube
 from pytubefix.cli import on_progress
 from io import BytesIO
+import json 
 
 class Processor():
     """
@@ -51,10 +52,21 @@ class Processor():
 
         response = requests.request("POST", self.shazam_endpoint, headers=self.headers, data=audio_data, params=self.querystring)
         text= response.json()
+        with open ('response.json', 'w') as f:
+            f.write(json.dumps(text, indent=2))
+            
+        try: 
+            isrc= text['track']['isrc']
+            print('ISRC found at: ', isrc)
+        except: 
+            print('ISRC not found')
+            raise SystemExit
+        
+        return isrc, text['track']["title"]
+        # return text['track']["title"], text['track']['subtitle'], text['track']['sections'][0]['metadata'][0]['text']
 
-        return text['track']["title"], text['track']['subtitle'], text['track']['sections'][0]['metadata'][0]['text']
-
-# pro= Processor("https://www.youtube.com/watch?v=aa8gI5ZVVhs")
+# pro= Processor("https://www.youtube.com/watch?v=aa8gI5ZVVhs") # nct dream
+# pro= Processor("https://www.youtube.com/watch?v=Dd1ILK2EkxI") # nct 127
 # track= pro.process_url()
-# track_title, artist, album_name = pro.recognize_audio()
-# print(track_title, artist, album_name)
+# isrc, track_title= pro.recognize_audio()
+# print(track_title, isrc)
