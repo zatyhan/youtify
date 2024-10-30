@@ -1,79 +1,81 @@
-streamlitappnope @ file:///home/conda/feedstock_root/build_artifacts/appnope_1707233003401/work
-asttokens @ file:///home/conda/feedstock_root/build_artifacts/asttokens_1698341106958/work
-async-timeout @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_9fv5z9mw0a/croot/async-timeout_1703097013706/work
-audioread @ file:///Users/runner/miniforge3/conda-bld/audioread_1696107634315/work
-Brotli @ file:///Users/runner/miniforge3/conda-bld/brotli-split_1695989838345/work
-certifi @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_c7dh9wvd8f/croot/certifi_1725551679893/work/certifi
-cffi @ file:///Users/runner/miniforge3/conda-bld/cffi_1723018421148/work
-charset-normalizer @ file:///home/conda/feedstock_root/build_artifacts/charset-normalizer_1698833585322/work
-comm @ file:///home/conda/feedstock_root/build_artifacts/comm_1710320294760/work
-contourpy @ file:///Users/runner/miniforge3/conda-bld/contourpy_1712429956224/work
-cycler @ file:///home/conda/feedstock_root/build_artifacts/cycler_1696677705766/work
-debugpy @ file:///Users/runner/miniforge3/conda-bld/debugpy_1722923791610/work
-decorator @ file:///home/conda/feedstock_root/build_artifacts/decorator_1641555617451/work
-Deprecated @ file:///Users/builder/cbouss/perseverance-python-buildout/croot/deprecated_1699253073836/work
-exceptiongroup @ file:///home/conda/feedstock_root/build_artifacts/exceptiongroup_1720869315914/work
-executing @ file:///home/conda/feedstock_root/build_artifacts/executing_1698579936712/work
-fonttools @ file:///Users/runner/miniforge3/conda-bld/fonttools_1720359074255/work
-h2 @ file:///home/conda/feedstock_root/build_artifacts/h2_1634280454336/work
+appnope==0.1.4
+asttokens==2.4.1
+async-timeout==4.0.3
+audioread==3.0.1
+Brotli==1.1.0
+certifi==2024.8.30
+cffi==1.17.0
+charset-normalizer==3.3.2
+comm==0.2.2
+contourpy==1.2.1
+cycler==0.12.1
+debugpy==1.8.5
+decorator==5.1.1
+Deprecated==1.2.13
+exceptiongroup==1.2.2
+executing==2.0.1
+fonttools==4.53.1
+h2==4.1.0
 hpack==4.0.0
-hyperframe @ file:///home/conda/feedstock_root/build_artifacts/hyperframe_1619110129307/work
-idna @ file:///home/conda/feedstock_root/build_artifacts/idna_1713279365350/work
-importlib_metadata @ file:///home/conda/feedstock_root/build_artifacts/importlib-metadata_1721856510709/work
-ipykernel @ file:///Users/runner/miniforge3/conda-bld/ipykernel_1719845458456/work
-ipython @ file:///home/conda/feedstock_root/build_artifacts/ipython_1719582526268/work
-jedi @ file:///home/conda/feedstock_root/build_artifacts/jedi_1696326070614/work
-joblib @ file:///home/conda/feedstock_root/build_artifacts/joblib_1714665484399/work
-jupyter_client @ file:///home/conda/feedstock_root/build_artifacts/jupyter_client_1716472197302/work
-jupyter_core @ file:///Users/runner/miniforge3/conda-bld/jupyter_core_1710257288950/work
-kiwisolver @ file:///Users/runner/miniforge3/conda-bld/kiwisolver_1695380047486/work
-lazy_loader @ file:///home/conda/feedstock_root/build_artifacts/lazy_loader_1712342969017/work
-librosa @ file:///home/conda/feedstock_root/build_artifacts/librosa_1715792228054/work
+hyperframe==6.0.1
+idna==3.7
+importlib_metadata==8.2.0
+ipykernel==6.29.5
+ipython==8.26.0
+jedi==0.19.1
+joblib==1.4.2
+jupyter_client==8.6.2
+jupyter_core==5.7.2
+kiwisolver==1.4.5
+lazy_loader==0.4
+librosa==0.10.2.post1
 llvmlite==0.43.0
-matplotlib @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_56lkmgsho5/croot/matplotlib-suite_1713336381321/work
-matplotlib-inline @ file:///home/conda/feedstock_root/build_artifacts/matplotlib-inline_1713250518406/work
-msgpack @ file:///Users/runner/miniforge3/conda-bld/msgpack-python_1715670625479/work
+matplotlib==3.8.4
+matplotlib-inline==0.1.7
+msgpack==1.0.8
 munkres==1.1.4
-nest_asyncio @ file:///home/conda/feedstock_root/build_artifacts/nest-asyncio_1705850609492/work
-numba @ file:///Users/runner/miniforge3/conda-bld/numba_1718888159427/work
-numpy @ file:///private/var/folders/c_/qfmhj66j0tn016nkx_th4hxm0000gp/T/abs_b7iptlxgej/croot/numpy_and_numpy_base_1708638622773/work/dist/numpy-1.26.4-cp312-cp312-macosx_10_9_x86_64.whl#sha256=17c6374322464ccb505fe098301a221fc8d08783063c9c532ee2e0ac2b7f4983
-packaging @ file:///home/conda/feedstock_root/build_artifacts/packaging_1718189413536/work
-parso @ file:///home/conda/feedstock_root/build_artifacts/parso_1712320355065/work
-pexpect @ file:///home/conda/feedstock_root/build_artifacts/pexpect_1706113125309/work
-pickleshare @ file:///home/conda/feedstock_root/build_artifacts/pickleshare_1602536217715/work
-pillow @ file:///Users/runner/miniforge3/conda-bld/pillow_1719903603989/work
-platformdirs @ file:///home/conda/feedstock_root/build_artifacts/platformdirs_1715777629804/work
-pooch @ file:///home/conda/feedstock_root/build_artifacts/pooch_1717777836653/work
-prompt_toolkit @ file:///home/conda/feedstock_root/build_artifacts/prompt-toolkit_1718047967974/work
-psutil @ file:///Users/runner/miniforge3/conda-bld/psutil_1719274626886/work
-ptyprocess @ file:///home/conda/feedstock_root/build_artifacts/ptyprocess_1609419310487/work/dist/ptyprocess-0.7.0-py2.py3-none-any.whl
-pure_eval @ file:///home/conda/feedstock_root/build_artifacts/pure_eval_1721585709575/work
-pycparser @ file:///home/conda/feedstock_root/build_artifacts/pycparser_1711811537435/work
-pydub @ file:///home/conda/feedstock_root/build_artifacts/pydub_1615612442567/work
-Pygments @ file:///home/conda/feedstock_root/build_artifacts/pygments_1714846767233/work
-pyparsing @ file:///Users/builder/cbouss/perseverance-python-buildout/croot/pyparsing_1699242788721/work
-PySocks @ file:///home/conda/feedstock_root/build_artifacts/pysocks_1661604839144/work
-python-dateutil @ file:///home/conda/feedstock_root/build_artifacts/python-dateutil_1709299778482/work
-python-dotenv @ file:///home/conda/feedstock_root/build_artifacts/python-dotenv-split_1706018097647/work
+nest_asyncio==1.6.0
+numba==0.60.0
+numpy==1.26.4
+packaging==24.1
+parso==0.8.4
+pexpect==4.9.0
+pickleshare==0.7.5
+pillow==10.4.0
+pip==24.2
+platformdirs==4.2.2
+pooch==1.8.2
+prompt_toolkit==3.0.47
+psutil==6.0.0
+ptyprocess==0.7.0
+pure_eval==0.2.3
+pycparser==2.22
+pydub==0.25.1
+Pygments==2.18.0
+pyparsing==3.0.9
+PySocks==1.7.1
+python-dateutil==2.9.0
+python-dotenv==1.0.1
 pytubefix==8.2.0
-pyzmq @ file:///Users/runner/miniforge3/conda-bld/pyzmq_1722971671376/work
-redis @ file:///Users/builder/cbouss/perseverance-python-buildout/croot/redis-py_1699288552375/work
-requests @ file:///home/conda/feedstock_root/build_artifacts/requests_1717057054362/work
-scikit-learn @ file:///Users/runner/miniforge3/conda-bld/scikit-learn_1719998119262/work/dist/scikit_learn-1.5.1-cp312-cp312-macosx_10_13_x86_64.whl#sha256=cd57ed28401ba59fad2a6335c38c593e66449d258eea7464ca8471802c196066
-scipy @ file:///Users/runner/miniforge3/conda-bld/scipy-split_1720323037566/work/dist/scipy-1.14.0-cp312-cp312-macosx_10_13_x86_64.whl#sha256=ef17059f0bb1dd87f139a4482c5fe552260988c2a04de9aa12940abb0f97d150
+pyzmq==26.1.0
+redis==4.3.4
+requests==2.32.3
+scikit-learn==1.5.1
+scipy==1.14.0
 setuptools==72.1.0
-six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
-soundfile @ file:///home/conda/feedstock_root/build_artifacts/pysoundfile_1676571469739/work
-soxr @ file:///Users/runner/miniforge3/conda-bld/soxr-python_1722044998259/work
-spotipy @ file:///home/conda/feedstock_root/build_artifacts/spotipy_1681113496836/work
-stack-data @ file:///home/conda/feedstock_root/build_artifacts/stack_data_1669632077133/work
-threadpoolctl @ file:///home/conda/feedstock_root/build_artifacts/threadpoolctl_1714400101435/work
-tornado @ file:///private/var/folders/c_/qfmhj66j0tn016nkx_th4hxm0000gp/T/abs_7e0ruwlfee/croot/tornado_1718740118099/work
-traitlets @ file:///home/conda/feedstock_root/build_artifacts/traitlets_1713535121073/work
-typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1717802530399/work
-urllib3 @ file:///home/conda/feedstock_root/build_artifacts/urllib3_1719391292974/work
-wcwidth @ file:///home/conda/feedstock_root/build_artifacts/wcwidth_1704731205417/work
+six==1.16.0
+soundfile==0.12.1
+soxr==0.4.0
+spotipy==2.23.0
+stack-data==0.6.2
+threadpoolctl==3.5.0
+tornado==6.4.1
+traitlets==5.14.3
+typing_extensions==4.12.2
+urllib3==2.2.2
+wcwidth==0.2.13
 wheel==0.44.0
-wrapt @ file:///Users/builder/cbouss/perseverance-python-buildout/croot/wrapt_1699245094349/work
-zipp @ file:///home/conda/feedstock_root/build_artifacts/zipp_1723591248676/work
+wrapt==1.14.1
+zipp==3.20.0
 zstandard==0.23.0
+streamlit
