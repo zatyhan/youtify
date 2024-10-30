@@ -51,17 +51,17 @@ class Processor():
         audio_data = base64.b64encode(audio._data).decode("utf-8")
 
         response = requests.request("POST", self.shazam_endpoint, headers=self.headers, data=audio_data, params=self.querystring)
-        text= response.json()
-        with open ('response.json', 'w') as f:
-            f.write(json.dumps(text, indent=2))
+        if response.status_code == 200:
+            text= response.json()
+            try: 
+                isrc= text['track']['isrc']
+            except: 
+                print('ISRC not found')
+                isrc= None
             
-        try: 
-            isrc= text['track']['isrc']
-        except: 
-            print('ISRC not found')
-            raise SystemExit
-        
-        return isrc, text['track']["title"]
+            return isrc, text['track']["title"]
+        else:
+            raise Exception('Failed to recognize audio')
         # return text['track']["title"], text['track']['subtitle'], text['track']['sections'][0]['metadata'][0]['text']
 
 # pro= Processor("https://www.youtube.com/watch?v=aa8gI5ZVVhs") # nct dream
