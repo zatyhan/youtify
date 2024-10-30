@@ -17,7 +17,7 @@ input_form= st.form(key='form', clear_on_submit=True)
 youtube_url = input_form.text_input("Enter the YouTube URL:", key="youtube_url", value= "https://www.youtube.com/watch?v=rMZeKQYLXWc")
 
 # Get the name of the playlist from the user
-playlist_name= input_form.text_input("Enter the name of the playlist you want to create on Spotify:", key="playlist_name")
+playlist_name= input_form.text_input("Enter the name of the playlist you want to create on Spotify:", key="playlist_name", value= "My Playlist")
 
 button = input_form.form_submit_button('Create my playlist!')
 
@@ -25,10 +25,12 @@ if button:
     playlist= PlaylistMaker(st.session_state.playlist_name)
     if 'sp' not in st.session_state:
         auth_url = playlist.authenticate()
+        print(auth_url)
         # webbrowser.open(url=st.session_state.auth_url)
-        # st.markdown(f'<meta http-equiv="refresh" content="0; url={auth_url}">',  unsafe_allow_html=True)
-        redirect(auth_url)
-        
+        st.markdown(f'<meta http-equiv="refresh" content="0; url={auth_url}">',  unsafe_allow_html=True)
+        # redirect(auth_url)
+        st.write(st.query_params)
+
     else: 
         sp= st.session_state.sp
         user_info = sp.me()

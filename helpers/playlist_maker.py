@@ -16,7 +16,7 @@ class PlaylistMaker():
         self.__scope__='playlist-modify-public'
     
     def authenticate(self):
-        self.__auth_manager__ = SpotifyPKCE(client_id=self.__clientID__, redirect_uri="https://youtify.streamlit.app/", scope=self.__scope__)
+        self.__auth_manager__ = SpotifyPKCE(client_id=self.__clientID__, redirect_uri="http://localhost:8502", scope=self.__scope__)
         url= self.__auth_manager__.get_authorize_url()
         return url        
 
