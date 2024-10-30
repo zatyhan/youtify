@@ -7,9 +7,10 @@ import requests
 from urllib.parse import urlencode
 import webbrowser
 
+load_dotenv()
+
 class PlaylistMaker():
     def __init__(self, name):
-        load_dotenv()
         self.playlist_name = name
         self.__clientID__ = "d3eb6ef85c20439d89f4c6b100024b20"        # self.__clientID__ = os.getenv('SPOTIFY_CLIENT_ID')
         self.__scope__='playlist-modify-public'

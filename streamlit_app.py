@@ -10,7 +10,7 @@ def main():
     
     input_form= st.form(key='form', clear_on_submit=True)
     # Get the YouTube URL from the user
-    youtube_url = input_form.text_input("Enter the YouTube URL:", key="youtube_url")
+    youtube_url = input_form.text_input("Enter the YouTube URL:", key="youtube_url", str="https://www.youtube.com/watch?v=bmuvondrzFA")
 
     # Get the name of the playlist from the user
     playlist_name= input_form.text_input("Enter the name of the playlist you want to create on Spotify:", key="playlist_name")
