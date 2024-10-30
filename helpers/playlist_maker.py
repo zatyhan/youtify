@@ -14,21 +14,11 @@ class PlaylistMaker():
         self.playlist_name = name
         self.__clientID__ = "d3eb6ef85c20439d89f4c6b100024b20"        # self.__clientID__ = os.getenv('SPOTIFY_CLIENT_ID')
         self.__scope__='playlist-modify-public'
-    
-    def authenticate(self):
         self.__auth_manager__ = SpotifyPKCE(client_id=self.__clientID__, redirect_uri="https://youtify.streamlit.app/", scope=self.__scope__)
-        url= self.__auth_manager__.get_authorize_url()
-        return url        
-
-    def create_playlist(self, code):
-        self.__auth_manager__.get_access_token(code)
         self.__sp__ = spotipy.Spotify(auth_manager=self.__auth_manager__)
         self.user_id= self.__sp__.me()['id']
-        try:
-            self.playlist_id = self.__sp__.user_playlist_create(self.user_id, self.playlist_name)['id'] #add template for description later
-            print('Successfully created playlist!')
-        except: 
-            print('Authentication went wrong.')
+        self.playlist_id = self.__sp__.user_playlist_create(self.user_id, self.playlist_name)['id'] #add template for description later
+
     def lookup(self, isrc):
         if  isrc:
             query= f"isrc:{isrc}"
