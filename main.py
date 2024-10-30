@@ -24,6 +24,7 @@ while start_time< video_length:
     try:
         isrc, track_title=  track.recognize_audio(start_time=start_time)
         print("Looking for: ", track_title)
+        print(' ')
         track_id, found_title, duration= playlist.lookup(isrc)
         track_ids.add(track_id)
 
