@@ -16,7 +16,8 @@ class Processor():
     def __init__(self, yt_url):
         load_dotenv()
         # shazam api variables
-        self.shazamapi_key = os.getenv('RAPIDAPI_KEY')
+        # self.shazamapi_key = os.getenv('RAPIDAPI_KEY')
+        self.shazamapi_key = "20255aac57msh804c236292b3ec2p12abd6jsna3d7d7386a44"
         self.shazam_endpoint = "https://shazam.p.rapidapi.com/songs/v2/detect"
         self.querystring = {"timezone":"America/Chicago","locale":"en-US"}
         self.headers = {
@@ -55,11 +56,10 @@ class Processor():
             text= response.json()
             try: 
                 isrc= text['track']['isrc']
+                return isrc, text['track']["title"]
             except: 
                 print('ISRC not found')
-                isrc= None
-            
-            return isrc, text['track']["title"]
+                return None, None
         else:
             raise Exception('Failed to recognize audio')
         # return text['track']["title"], text['track']['subtitle'], text['track']['sections'][0]['metadata'][0]['text']

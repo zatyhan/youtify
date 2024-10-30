@@ -24,17 +24,18 @@ while start_time< video_length:
     try:
         isrc, track_title=  track.recognize_audio(start_time=start_time)
         print("Looking for: ", track_title)
+        print(' ')
         track_id, found_title, duration= playlist.lookup(isrc)
-        track_ids.add(track_id)
-
-        start_time+=duration +5
+        if track_id:
+            track_ids.add(track_id)
+            start_time+=duration + 5
 
     except KeyboardInterrupt:
         print('The [Ctrl+C] key was pressed. Exiting...')
         raise SystemExit
     
     except Exception as e:
-        print('Track not found '+ e)
+        print('Track not found ')
         start_time+=60*2.5
 
     finally:
