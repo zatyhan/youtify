@@ -27,3 +27,6 @@ class PlaylistMaker():
 
     def add_to_playlist(self, track_id):
         self.__sp__.user_playlist_add_tracks(self.user_id, self.playlist_id, [track_id])
+
+    def get_playlist(self):
+        return self.__sp__.playlist(self.playlist_id)
