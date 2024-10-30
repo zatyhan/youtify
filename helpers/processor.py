@@ -56,11 +56,10 @@ class Processor():
             text= response.json()
             try: 
                 isrc= text['track']['isrc']
+                return isrc, text['track']["title"]
             except: 
                 print('ISRC not found')
-                isrc= None
-            
-            return isrc, text['track']["title"]
+                return None, None
         else:
             raise Exception('Failed to recognize audio')
         # return text['track']["title"], text['track']['subtitle'], text['track']['sections'][0]['metadata'][0]['text']
