@@ -23,8 +23,11 @@ class PlaylistMaker():
         self.__auth_manager__.get_access_token(code)
         self.__sp__ = spotipy.Spotify(auth_manager=self.__auth_manager__)
         self.user_id= self.__sp__.me()['id']
-        self.playlist_id = self.__sp__.user_playlist_create(self.user_id, self.playlist_name)['id'] #add template for description later
-        
+        try:
+            self.playlist_id = self.__sp__.user_playlist_create(self.user_id, self.playlist_name)['id'] #add template for description later
+            print('Successfully created playlist!')
+        except: 
+            print('Authentication went wrong.')
     def lookup(self, isrc):
         if  isrc:
             query= f"isrc:{isrc}"
@@ -40,6 +43,6 @@ class PlaylistMaker():
     def get_playlist(self):
         return self.__sp__.playlist(self.playlist_id)
 
-pl = PlaylistMaker('test1')
-pl.add_to_playlist('6rqhFgbbKwnb9MLmUQDhG6')
+# pl = PlaylistMaker('test1')
+# pl.add_to_playlist('6rqhFgbbKwnb9MLmUQDhG6')
 # https://open.spotify.com/track/pwd?si=31500007bb7144e6
