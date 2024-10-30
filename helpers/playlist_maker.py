@@ -41,6 +41,6 @@ class PlaylistMaker():
     def get_playlist(self):
         return self.__sp__.playlist(self.playlist_id)
 
-pl = PlaylistMaker('test1')
-pl.add_to_playlist('6rqhFgbbKwnb9MLmUQDhG6')
+# pl = PlaylistMaker('test1')
+# pl.add_to_playlist('6rqhFgbbKwnb9MLmUQDhG6')
 # https://open.spotify.com/track/pwd?si=31500007bb7144e6
