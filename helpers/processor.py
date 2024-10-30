@@ -57,7 +57,6 @@ class Processor():
             
         try: 
             isrc= text['track']['isrc']
-            print('ISRC found at: ', isrc)
         except: 
             print('ISRC not found')
             raise SystemExit
