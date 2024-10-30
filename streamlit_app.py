@@ -9,7 +9,7 @@ st.write(
 
 input_form= st.form(key='form', clear_on_submit=True)
 # Get the YouTube URL from the user
-youtube_url = input_form.text_input("Enter the YouTube URL:", key="youtube_url")
+youtube_url = input_form.text_input("Enter the YouTube URL:", key="youtube_url", value= "https://www.youtube.com/watch?v=rMZeKQYLXWc")
 
 # Get the name of the playlist from the user
 playlist_name= input_form.text_input("Enter the name of the playlist you want to create on Spotify:", key="playlist_name")
@@ -21,7 +21,8 @@ if button:
     if 'sp' not in st.session_state:
         auth_url = playlist.authenticate()
         # webbrowser.open(url=st.session_state.auth_url)
-        st.markdown(f'<meta http-equiv="refresh" content="0; url={auth_url}">')
+        st.markdown(f'<meta http-equiv="refresh" content="0; url={auth_url}">',  unsafe_allow_html=True)
+
         print('User has been successfully authenticated')
         print(st.query_params)
 
