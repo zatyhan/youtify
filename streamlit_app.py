@@ -30,7 +30,7 @@ async def main():
             # webbrowser.open(url=st.session_state.auth_url)
             await st.markdown(f'<meta http-equiv="refresh" content="0; url={auth_url}">',  unsafe_allow_html=True)
             # redirect(auth_url)
-            query_params= await st.query_params()
+            query_params= st.query_params()
             print(query_params)
             # st.write(st.query_params)   
             # print('here')
