@@ -2,22 +2,10 @@ import streamlit as st
 from helpers import Processor, PlaylistMaker
 import webbrowser
 
-<<<<<<< HEAD
-def main():
-    st.title("Youtify 🎵")
-    st.write(
-        "Convert your favorite YouTube music videos to Spotify playlists!"
-    )
-    
-    input_form= st.form(key='form', clear_on_submit=True)
-    # Get the YouTube URL from the user
-    youtube_url = input_form.text_input("Enter the YouTube URL:", key="youtube_url", str="https://www.youtube.com/watch?v=bmuvondrzFA")
-=======
 st.title("Youtify 🎵")
 st.write(
     "Convert your favorite YouTube music videos to Spotify playlists!"
 )
->>>>>>> 90ae1de (removed main function)
 
 input_form= st.form(key='form', clear_on_submit=True)
 # Get the YouTube URL from the user
@@ -30,11 +18,10 @@ button = input_form.form_submit_button('Create my playlist!')
 
 if button:
     playlist= PlaylistMaker(st.session_state.playlist_name)
-
     if 'sp' not in st.session_state:
         auth_url = playlist.authenticate()
         # webbrowser.open(url=st.session_state.auth_url)
-        st.markdown(f'<meta http-equiv="refresh" content="0; url={auth_url}">', unsafe_allow_html=True)
+        st.markdown(f'<meta http-equiv="refresh" content="0; url={auth_url}">')
         print('User has been successfully authenticated')
         print(st.query_params)
 
