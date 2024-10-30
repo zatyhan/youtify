@@ -7,7 +7,7 @@ def redirect(url):
     js = f'window.open("{url}", "_self");'
     st.components.v1.html(f'<script>{js}</script>', height=0)
     
-async def main():
+def main():
     st.title("Youtify 🎵")
     st.write(
         "Convert your favorite YouTube music videos to Spotify playlists!"
@@ -23,32 +23,34 @@ async def main():
     button = input_form.form_submit_button('Create my playlist!')
 
     if button:
-        playlist= await PlaylistMaker(st.session_state.playlist_name)
+        playlist= PlaylistMaker(st.session_state.playlist_name)
         if 'sp' not in st.session_state:
             auth_url = playlist.authenticate()
             # print(auth_url)
             # webbrowser.open(url=st.session_state.auth_url)
-            await st.markdown(f'<meta http-equiv="refresh" content="0; url={auth_url}">',  unsafe_allow_html=True)
+            st.markdown(f'<meta http-equiv="refresh" content="0; url={auth_url}">',  unsafe_allow_html=True)
             # redirect(auth_url)
-            query_params= st.query_params()
-            print(query_params)
-            # st.write(st.query_params)   
-            # print('here')
-
-        else: 
-            sp= st.session_state.sp
+            st.stop()
+    
+    query_params = st.query_params
+    if 'code' in query_params:
+        code = query_params['code'][0]
+        if 'sp' not in st.session_state:
+            code = query_params['code']
+            if 'sp' not in st.session_state:
+                playlist = PlaylistMaker(st.session_state.playlist_name)
+                playlist.create_playlist(code)
+                st.write('Successfully created playlist')
+                st.session_state.sp = playlist.sp  # Store the authenticated session
+            else:
+                st.write('Playlist already created')
+        elif 'sp' in st.session_state:
+            sp = st.session_state.sp
             user_info = sp.me()
             st.write(f"Hello {user_info['display_name']}!")
-
-        if 'code' in query_params:
-            code = query_params['code'][0]
-            playlist.create_playlist(code)
-            st.write('Successfully created playlist')
-
-        else: 
-            st.write('Did not pass authentication')
-            raise SystemExit
+        else:
+            st.write('Waiting for authentication...')
 
 if __name__==  "__main__":
-    asyncio.run(main())
+    main()
 
