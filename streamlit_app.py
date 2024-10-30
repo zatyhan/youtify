@@ -39,14 +39,14 @@ if button:
         user_info = sp.me()
         st.write(f"Hello {user_info['display_name']}!")
 
-if 'code' in st.query_params:
-    code = st.query_params['code'][0]
-    st.session_state.playlist.create_playlist(code)
-    st.write('Successfully created playlist')
+    if 'code' in st.query_params:
+        code = st.query_params['code'][0]
+        st.session_state.playlist.create_playlist(code)
+        st.write('Successfully created playlist')
 
-else: 
-    st.write('Did not pass authentication')
-    raise SystemExit
+    else: 
+        st.write('Did not pass authentication')
+        raise SystemExit
 
 
 
