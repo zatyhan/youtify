@@ -13,6 +13,8 @@ def main():
         "Convert your favorite YouTube music videos to Spotify playlists!"
     )
 
+    if 'playlist' not in st.session_state:
+        st.session_state.playlist= None
     input_form= st.form(key='form', clear_on_submit=True)
     # Get the YouTube URL from the user
     youtube_url = input_form.text_input("Enter the YouTube URL:", key="youtube_url", value= "https://www.youtube.com/watch?v=rMZeKQYLXWc")
@@ -23,25 +25,31 @@ def main():
     button = input_form.form_submit_button('Create my playlist!')
 
     if button:
-        playlist= PlaylistMaker(st.session_state.playlist_name)
+        st.session_state.playlist= PlaylistMaker(st.session_state.playlist_name)
+        print('1: ', st.session_state.playlist)
         if 'sp' not in st.session_state:
-            auth_url = playlist.authenticate()
+            auth_url = st.session_state.playlist.authenticate()
             # print(auth_url)
+            print('authenticating...')
             # webbrowser.open(url=st.session_state.auth_url)
             st.markdown(f'<meta http-equiv="refresh" content="0; url={auth_url}">',  unsafe_allow_html=True)
             # redirect(auth_url)
+            print('2:', st.session_state.playlist)
             st.stop()
+    
+    print('3: ', st.session_state.playlist)
     
     query_params = st.query_params
     if 'code' in query_params:
+        print('creating playlist....')
+        print('authorization code: ', query_params['code'])
         code = query_params['code'][0]
         if 'sp' not in st.session_state:
             code = query_params['code']
             if 'sp' not in st.session_state:
-                playlist = PlaylistMaker(st.session_state.playlist_name)
-                playlist.create_playlist(code)
+                st.session_state.playlist.create_playlist(code)
                 st.write('Successfully created playlist')
-                st.session_state.sp = playlist.sp  # Store the authenticated session
+                st.session_state.sp = st.session_state.playlist.sp  # Store the authenticated session
             else:
                 st.write('Playlist already created')
         elif 'sp' in st.session_state:

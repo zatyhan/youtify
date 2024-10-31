@@ -14,9 +14,10 @@ class PlaylistMaker():
         self.__clientID__ = "d3eb6ef85c20439d89f4c6b100024b20"        
         # self.__clientID__ = os.getenv('SPOTIFY_CLIENT_ID')
         self.__scope__='playlist-modify-public'
+        self.__auth_manager__= None
     
     def authenticate(self):
-        self.__auth_manager__ = SpotifyPKCE(client_id=self.__clientID__, redirect_uri="http://localhost:8502", scope=self.__scope__)
+        self.__auth_manager__ = SpotifyPKCE(client_id=self.__clientID__, redirect_uri="https://organic-meme-7xpj5v76pjr3xq9j-8501.app.github.dev/", scope=self.__scope__)
         url= self.__auth_manager__.get_authorize_url()
         return url        
 
