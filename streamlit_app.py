@@ -95,7 +95,7 @@ def main():
 
             while start_time< video_length:
                 try:
-                    text.write(f'\nFound {len(track_ids)} {'tracks' if len(track_ids)>1 else 'track'}. Recognizing the next track...\n')
+                    text.write(f"\nFound {len(track_ids)} {'tracks' if len(track_ids)>1 else 'track'}. Recognizing the next track...\n")
                     print('\nRecognizing the next track...\n')
                     isrc, track_title=  track.recognize_audio(start_time=start_time)
                     print("Looking for: ", track_title)
