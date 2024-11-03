@@ -26,20 +26,21 @@ while start_time< video_length:
         print("Looking for: ", track_title)
         print(' ')
         track_id, found_title, duration= playlist.lookup(isrc)
-        if track_id:
-            track_ids.add(track_id)
-            start_time+=duration + 5
+        track_ids.add(track_id)
+        print(f"Found: {found_title})")
+
+        start_time+=duration +5
 
     except KeyboardInterrupt:
         print('The [Ctrl+C] key was pressed. Exiting...')
         raise SystemExit
     
     except Exception as e:
-        print('Track not found ')
+        print('Track not found')
         start_time+=60*2.5
 
     finally:
-        print('Finding the next title:\n')
+        print('\nFinding the next title...\n')
         
 for t in track_ids:
     playlist.add_to_playlist(t)
