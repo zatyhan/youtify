@@ -2,7 +2,6 @@ import requests
 from pydub import AudioSegment
 import os
 import base64
-from dotenv import load_dotenv
 import streamlit as st
 from pytubefix import YouTube
 from pytubefix.cli import on_progress
@@ -15,7 +14,6 @@ class Processor():
     Class to extract audio from youtube video, and recognizing the audio using Shazam API
 
     """
-    load_dotenv()
     def __init__(self, yt_url):
         # shazam api variables
         self.shazamapi_key = st.secrets['RAPIDAPI_KEY']
