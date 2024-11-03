@@ -1,6 +1,7 @@
 import streamlit as st
 from helpers import Processor, PlaylistMaker
 import asyncio
+import os
 import urllib.parse
 
 @st.cache_data
@@ -18,7 +19,7 @@ def authenticator(playlist, state_data):
     return playlist.authenticate()
 
 def main():
-
+    os.environ["PATH"] += os.pathsep + f'/Users/nureizzatyhamzaid/projects/youtify'
     if 'playlist' not in st.session_state:
         set_playlist_maker(PlaylistMaker())
 

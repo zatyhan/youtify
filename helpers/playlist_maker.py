@@ -10,6 +10,7 @@ class PlaylistMaker():
         self.__scope__='playlist-modify-public'
         self.__auth_manager__ = SpotifyPKCE(client_id=self.__clientID__, redirect_uri="https://organic-meme-7xpj5v76pjr3xq9j-8501.app.github.dev", scope=self.__scope__)
         self.authenticated= False
+        # https://organic-meme-7xpj5v76pjr3xq9j-8501.app.github.dev
         # http://localhost:8501
     def get_authenticator(self, state=None):
         url= self.__auth_manager__.get_authorize_url(state=state)
