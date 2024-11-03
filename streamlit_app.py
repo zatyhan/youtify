@@ -74,14 +74,16 @@ def main():
                 print('Processor created')
             except:
                 print('Invalid URL')
-                raise SystemExit
+                st.stop()
+                # raise SystemExit
 
             try:
                 track.process_url()
                 print('Youtube URL retrieved and processed')
             except:
                 print('Failed to process track')
-                raise SystemExit
+                st.stop()
+                # raise SystemExit
 
             start_time=0
             video_length= track.video_length()
