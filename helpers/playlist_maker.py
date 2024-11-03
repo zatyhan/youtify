@@ -8,7 +8,8 @@ class PlaylistMaker():
         self.playlist_name = None
         self.__clientID__ = st.secrets['SPOTIFY_CLIENT_ID']
         self.__scope__='playlist-modify-public'
-        self.__auth_manager__ = SpotifyPKCE(client_id=self.__clientID__, redirect_uri="https://youtify.streamlit.app", scope=self.__scope__)
+        self.redirect_url = "https://youtify.streamlit.app"
+        self.__auth_manager__ = SpotifyPKCE(client_id=self.__clientID__, redirect_uri= self.redirect_uri, scope=self.__scope__, cache_handler=spotipy.CacheHandler())
         self.authenticated= False
 
         # https://organic-meme-7xpj5v76pjr3xq9j-8501.app.github.dev
