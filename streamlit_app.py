@@ -19,7 +19,7 @@ def authenticator(playlist, state_data):
     return playlist.authenticate()
 
 def main():
-    os.environ["PATH"] += os.pathsep + f'/Users/nureizzatyhamzaid/projects/youtify'
+    os.environ["PATH"] += os.pathsep + f'/workspaces/youtify'
     if 'playlist' not in st.session_state:
         set_playlist_maker(PlaylistMaker())
 
@@ -81,6 +81,7 @@ def main():
                 raise SystemExit
 
             try:
+                text.write('Authenticating youtube...')
                 track.process_url()
                 print('Youtube URL retrieved and processed')
             except Exception as e:
@@ -94,13 +95,11 @@ def main():
 
             while start_time< video_length:
                 try:
-                    text.write(f'\nFound {len(track_ids)} tracks. Recognizing the next track...\n')
+                    text.write(f'\nFound {len(track_ids)} {'tracks' if len(track_ids)>1 else 'track'}. Recognizing the next track...\n')
                     print('\nRecognizing the next track...\n')
                     isrc, track_title=  track.recognize_audio(start_time=start_time)
                     print("Looking for: ", track_title)
-                    # text.write(f"Looking for: {track_title}")
                     track_id, found_title, duration= st.session_state.playlist.lookup(isrc)
-                    # text.write(f"Found: {found_title}")
                     track_ids.add(track_id)
 
                     start_time+=duration +5
@@ -110,16 +109,21 @@ def main():
                     raise SystemExit
                 
                 except Exception as e:
-                    print('Track not found ')
+                    print('Track not found')
                     start_time+=60*2.5
-                    
-            for t in track_ids:
-                st.session_state.playlist.add_to_playlist(t)
+            
+            if len(track_ids)>0:
+                for t in track_ids:
+                    st.session_state.playlist.add_to_playlist(t)
+                st.success(f'Playlist {st.session_state.playlist_name} created successfully!') 
+                st.link_button('View playlist →', st.session_state.playlist.get_playlist()['external_urls']['spotify'])
+
+            else: 
+                text.write('0 tracks found. ')
+            
             text.empty()
 
-        st.success(f'Playlist {st.session_state.playlist_name} created successfully!') 
 
-        st.link_button('View playlist →', st.session_state.playlist.get_playlist()['external_urls']['spotify'])
 
     else:
         st.write('Waiting for authentication...')
