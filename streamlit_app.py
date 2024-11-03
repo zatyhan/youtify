@@ -40,8 +40,10 @@ def main():
             state_data = f"{youtube_url}|||{playlist_name}"
             auth_url = st.session_state.playlist.get_authenticator(state=state_data) 
             print('authenticating at : ', auth_url)
-            st.markdown(f'<meta http-equiv="refresh" content="0; url={auth_url}">',  unsafe_allow_html=True)
-        
+            try:
+                st.markdown(f'<meta http-equiv="refresh" content="0; url={auth_url}">',  unsafe_allow_html=True)
+            except Exception as e:
+                print('Fail to authenticate due to ', str(e))
     # after redirection
     query_params = st.query_params
     if 'code' in query_params and 'state' in query_params:
@@ -74,15 +76,15 @@ def main():
                 print('Processor created')
             except:
                 print('Invalid URL')
-                st.stop()
+                st.rerun()
                 # raise SystemExit
 
             try:
                 track.process_url()
                 print('Youtube URL retrieved and processed')
-            except:
-                print('Failed to process track')
-                st.stop()
+            except Exception as e:
+                print('Failed to process track due to ', str(e))
+                st.rerun()
                 # raise SystemExit
 
             start_time=0
