@@ -42,7 +42,8 @@ def main():
             auth_url = st.session_state.playlist.get_authenticator(state=state_data) 
             print('authenticating at : ', auth_url)
             try:
-                st.markdown(f'<meta http-equiv="refresh" content="0; url={auth_url}">',  unsafe_allow_html=True)
+                st.link_button('Authenticate here', url= auth_url)
+                # st.markdown(f'<meta http-equiv="refresh" content="0; url={auth_url}">',  unsafe_allow_html=True)
             except Exception as e:
                 print('Fail to authenticate due to ', str(e))
     # after redirection
