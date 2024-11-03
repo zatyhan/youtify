@@ -3,6 +3,7 @@ from pydub import AudioSegment
 import os
 import base64
 from dotenv import load_dotenv
+import streamlit as st
 from pytubefix import YouTube
 from pytubefix.cli import on_progress
 from io import BytesIO
@@ -18,7 +19,8 @@ class Processor():
     def __init__(self, yt_url):
         # shazam api variables
 
-        self.shazamapi_key = os.getenv('RAPIDAPI_KEY')
+        # self.shazamapi_key = os.getenv('RAPIDAPI_KEY')
+        self.shazamapi_key = st.secrets['RAPIDAPI_KEY']
         # self.shazamapi_key = "20255aac57msh804c236292b3ec2p12abd6jsna3d7d7386a44"
         self.shazam_endpoint = "https://shazam.p.rapidapi.com/songs/v2/detect"
         self.querystring = {"timezone":"America/Chicago","locale":"en-US"}
