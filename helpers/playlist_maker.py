@@ -8,8 +8,6 @@ class PlaylistMaker():
     load_dotenv()
     def __init__(self):
         self.playlist_name = None
-        # self.__clientID__ = "d3eb6ef85c20439d89f4c6b100024b20"        
-        # self.__clientID__ = os.getenv('SPOTIFY_CLIENT_ID')
         self.__clientID__ = st.secrets['SPOTIFY_CLIENT_ID']
         self.__scope__='playlist-modify-public'
         self.__auth_manager__ = SpotifyPKCE(client_id=self.__clientID__, redirect_uri="https://youtify.streamlit.app/", scope=self.__scope__)
@@ -44,7 +42,3 @@ class PlaylistMaker():
 
     def get_playlist(self):
         return self.__sp__.playlist(self.playlist_id)
-
-# pl = PlaylistMaker('test1')
-# pl.add_to_playlist('6rqhFgbbKwnb9MLmUQDhG6')
-# https://open.spotify.com/track/pwd?si=31500007bb7144e6
