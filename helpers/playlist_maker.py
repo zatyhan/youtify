@@ -1,11 +1,9 @@
 import spotipy
 from spotipy.oauth2 import SpotifyPKCE
-from dotenv import load_dotenv
 import os
 import streamlit as st
 
 class PlaylistMaker():
-    load_dotenv()
     def __init__(self):
         self.playlist_name = None
         # self.__clientID__ = "d3eb6ef85c20439d89f4c6b100024b20"        
