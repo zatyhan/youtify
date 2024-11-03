@@ -35,7 +35,7 @@ class Processor():
     
     def process_url(self):
         self.buffer = BytesIO()
-        yt= YouTube(self.yt_url, use_po_token=True)        
+        yt= YouTube(self.yt_url, use_po_token=True, po_token_verifier=self.get_token())        
         yt.streams.filter(only_audio=True).first().stream_to_buffer(self.buffer)
 
         # return self.buffer
