@@ -8,15 +8,16 @@ from pytubefix.cli import on_progress
 from io import BytesIO
 import json 
 
-load_dotenv()
 
 class Processor():
     """
     Class to extract audio from youtube video, and recognizing the audio using Shazam API
 
     """
+    load_dotenv()
     def __init__(self, yt_url):
         # shazam api variables
+
         self.shazamapi_key = os.getenv('RAPIDAPI_KEY')
         # self.shazamapi_key = "20255aac57msh804c236292b3ec2p12abd6jsna3d7d7386a44"
         self.shazam_endpoint = "https://shazam.p.rapidapi.com/songs/v2/detect"

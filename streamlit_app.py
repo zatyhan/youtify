@@ -2,6 +2,7 @@ import streamlit as st
 from helpers import Processor, PlaylistMaker
 import asyncio
 import urllib.parse
+from dotenv import load_dotenv
 
 @st.cache_data
 def get_playlist_maker(playlist_name, youtube_url):
@@ -19,7 +20,8 @@ def authenticator(playlist, state_data):
 
 def main():
 
-    print(st.session_state)
+    # print(st.session_state)
+    load_dotenv()
 
     if 'playlist' not in st.session_state:
         set_playlist_maker(PlaylistMaker())
