@@ -27,11 +27,21 @@ class Processor():
 
         self.yt_url = yt_url
         self.buffer = None
+
+    def get_token(self):
+        print('visitor data token: ', st.secrets['VISITOR_DATA'])
+        print('po token: ', st.secrets['PO_TOKEN'])
+        def verifier():
+            return (st.secrets['VISITOR_DATA'], st.secrets['PO_TOKEN'])
+        return verifier
     
     def process_url(self):
         self.buffer = BytesIO()
         yt= YouTube(self.yt_url, use_oauth=True, allow_oauth_cache=True)       
+        # , use_po_token=True, po_token_verifier=self.get_token() 
         yt.streams.filter(only_audio=True).first().stream_to_buffer(self.buffer)
+
+        # return self.buffer
 
     def video_length(self):
         self.buffer.seek(0)
