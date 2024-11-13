@@ -1,15 +1,8 @@
 import spotipy
 from spotipy.oauth2 import SpotifyPKCE
-from dotenv import load_dotenv
-import os
-import json
-import requests
-from urllib.parse import urlencode
-import webbrowser
 
 class PlaylistMaker():
     def __init__(self):
-        load_dotenv()
         self.playlist_name = " "
         self.__clientID__ = "d3eb6ef85c20439d89f4c6b100024b20"        
         # self.__clientID__ = os.getenv('SPOTIFY_CLIENT_ID')
@@ -45,6 +38,3 @@ class PlaylistMaker():
     def get_playlist(self):
         return self.__sp__.playlist(self.playlist_id)
 
-# pl = PlaylistMaker('test1')
-# pl.add_to_playlist('6rqhFgbbKwnb9MLmUQDhG6')
-# https://open.spotify.com/track/pwd?si=31500007bb7144e6
