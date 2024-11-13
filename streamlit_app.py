@@ -41,6 +41,12 @@ if 'signed_in' not in st.session_state:
 if 'code'  not in st.session_state:
     st.session_state.code= ""
 
+if 'youtube_url' not in st.session_state: 
+    st.session_state.youtube_url= None
+
+if 'playlist_name' not in st.session_state:
+    st.session_state.playlist_name= None
+
 input_form= st.form(key='form', clear_on_submit=True)
 youtube_url = input_form.text_input("Enter the YouTube URL:", key="_youtube_url")
 playlist_name= input_form.text_input("Enter the name of the playlist you want to create on Spotify:", key="_playlist_name")
@@ -58,10 +64,14 @@ if button:
         set_playlist_maker(st.session_state.playlist)
     #check if yotuuber url and playlist name is preserved across redirects
 
+print('youtube_url out: ', st.session_state.youtube_url)
+print('playlist_name out: ', st.session_state.playlist_name)
 query_params = st.query_params
 if 'code' in query_params and 'state' in query_params:
-    decoded_state = urllib.parse.unquote(query_params['state'])
-    st.session_state.youtube_url, st.session_state.playlist_name= decoded_state.split('|||')
+    if not st.session_state.youtube_url and not st.session_state.playlist_name:
+        decoded_state = urllib.parse.unquote(query_params['state'])
+        st.session_state.youtube_url, st.session_state.playlist_name= decoded_state.split('|||')
+   
     text= st.empty()
     print('creating playlist....')
     st.session_state.code= query_params['code']
@@ -76,7 +86,7 @@ if 'code' in query_params and 'state' in query_params:
             st.write(f'Error during authorization: {str(e)}')
         
         else:
-            st.success('Successfully authenticated!')
+            text.success('Successfully authenticated!')
             st.session_state.signed_in= True
             set_playlist_maker(st.session_state.playlist_maker)
     
@@ -88,7 +98,7 @@ if 'code' in query_params and 'state' in query_params:
     except Exception as e:
         st.write(f'Error during playlist creation: {str(e)}')
     else:
-        st.success('Playlist created successfully!')
+        text.success('Playlist created successfully!')
     
         text.write('Retrieving and processing Youtube URL...')
     
@@ -100,7 +110,7 @@ if 'code' in query_params and 'state' in query_params:
             text.write('ERROR: Failed to create processor:', str(e))
 
         else:
-            text.write('Processor created successfully')
+            text.success('Processor created successfully')
             try:
                 track.process_url()
                 print('Youtube URL retrieved and processed')
