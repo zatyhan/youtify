@@ -13,7 +13,8 @@ def set_playlist_maker(playlist):
 
 def sign_in(state):
     try: 
-        auth_url= st.session_state.playlist.get_auth_url(state)
+        # auth_url= st.session_state.playlist.get_auth_url(state)
+        auth_url= 'https://www.google.com/'
         link_html = " <a href=\"{url}\" >{msg}</a> ".format(
         url=auth_url,
         msg="Click me to authenticate!")
@@ -27,7 +28,7 @@ def sign_in(state):
         # st.success('Successfully authenticated!')
 
 
-st.title("Youtify 🎵")
+st.title("Youtify Refactor ver🎵")
 st.write(
     "Convert your favorite YouTube music videos to Spotify playlists!"
 )
