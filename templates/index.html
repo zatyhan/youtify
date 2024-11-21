@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <title>Youtify 🎵</title>
 </head>
 <body>
@@ -11,7 +11,7 @@
         <h1>Youtify 🎵</h1>
         <p>Convert your favorite YouTube music videos to Spotify playlists!</p>
         
-        <form id="playlist-form">
+        <form id="playlist-form" action="/"  method="POST">
             <label for="youtube-url">Enter the YouTube URL:</label>
             <input type="text" id="youtube-url" name="youtube-url" value="https://www.youtube.com/watch?v=rMZeKQYLXWc" required>
             
