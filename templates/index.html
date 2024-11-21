@@ -18,14 +18,18 @@
             <label for="playlist-name">Enter the name of the playlist you want to create on Spotify:</label>
             <input type="text" id="playlist-name" name="playlist-name" value="My Playlist" required>
             
-            <button type="submit">Create my playlist!</button>
+            <input type="submit" value="Create my playlist!">
         </form>
         
         <div id="auth-link"></div>
-        <div id="status-message"></div>
-    </div>
+        <div id="status-message">
+            <p>{{ auth_status }}</p>
+        </div>
+        <div id="playlist-link">
+            <button href="{{ playlist_url }}" target="_blank">Open my playlist on Spotify</button>
+        </div>
 
-    <script>
+    <!-- <script>
         // Placeholder for authentication logic
         document.getElementById('playlist-form').onsubmit = function(event) {
             event.preventDefault();
@@ -33,6 +37,6 @@
             document.getElementById('auth-link').innerHTML = authLink;
             document.getElementById('status-message').innerText = 'Waiting for authentication...';
         };
-    </script>
+    </script> -->
 </body>
 </html>

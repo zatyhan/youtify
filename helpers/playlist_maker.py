@@ -1,6 +1,9 @@
 import spotipy
 from spotipy.oauth2 import SpotifyPKCE
 import streamlit as st
+import os 
+from dotenv import load_dotenv
+load_dotenv()
 
 class PlaylistMaker():
     def __init__(self):
@@ -8,10 +11,11 @@ class PlaylistMaker():
         self.__scope__='playlist-modify-public'
         self.__clientID__ = st.secrets['SPOTIFY_CLIENT_ID']
         self.__scope__='playlist-modify-public'
-        self.redirect_uri= "https://organic-meme-7xpj5v76pjr3xq9j-8501.app.github.dev"
+        self.redirect_uri= "http://127.0.0.1:5000/callback"
         self.__auth_manager__ = SpotifyPKCE(client_id=self.__clientID__, redirect_uri=self.redirect_uri, scope=self.__scope__)
         # https://organic-meme-7xpj5v76pjr3xq9j-8501.app.github.dev
         # http://localhost:8501
+        # http://127.0.0.1:5000/callback
     def get_auth_url(self, state=None):
         url= self.__auth_manager__.get_authorize_url(state=state)
         return url        
