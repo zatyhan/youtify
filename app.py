@@ -3,7 +3,8 @@ from flask_dance.contrib.spotify import make_spotify_blueprint, spotify
 from helpers import Processor, PlaylistMaker 
 from dotenv import load_dotenv
 import os 
-import jsonify 
+import jsonify
+import json 
 
 app = Flask(__name__)
 
@@ -19,13 +20,23 @@ app.secret_key= os.getenv('SECRET_KEY')
 @app.route('/', methods=['GET','POST'])
 def home():
 
+    if 'sp' in session:
+        sp= PlaylistMaker(**json.loads(session['sp']))
+
     if 'code' in session:
+        # if sp.authorized==False:
+        #     sp.authorize(session['code'])
+        # else:
+        #     print('Already authorized')
+            
         try:
+
             sp.create_playlist(session['playlist_name'])
             print('Playlist created successfully')
         except Exception as e:
-            print('Failed to create playlist')
-            raise SystemExit
+            print('Failed to create playlist due to error: ', str(e))
+            session.clear()
+            return render_template('index.html', auth_status='Failed to create playlist. Please enter the details again.')
         else:
             print('Retrieving audio from youtube video...')
 
@@ -72,14 +83,14 @@ def home():
                     playlist_url= sp.get_playlist()['external_urls']['spotify']
                     return render_template('index.html', auth_status='Authenticated', playlist_url=playlist_url)
 
-
         return render_template('index.html', auth_status='Error')
     if request.method == 'POST':
         session['yt_url'] = request.form['youtube-url']
         session['playlist_name'] = request.form['playlist-name']
-        
+
         try:
             sp= PlaylistMaker()
+            session['sp']= json.dumps(sp, default=lambda o: o.__dict__, indent=4)
             return redirect(sp.get_auth_url())
         except Exception as e:
             print(f'Error during authorization: {str(e)}')

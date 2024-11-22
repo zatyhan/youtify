@@ -13,6 +13,10 @@ class PlaylistMaker():
         self.__scope__='playlist-modify-public'
         self.redirect_uri= "http://127.0.0.1:5000/callback"
         self.__auth_manager__ = SpotifyPKCE(client_id=self.__clientID__, redirect_uri=self.redirect_uri, scope=self.__scope__)
+        self.user_id= None
+        self.__sp__= None
+        self.playlist_id= None
+        self.authorized= False
         # https://organic-meme-7xpj5v76pjr3xq9j-8501.app.github.dev
         # http://localhost:8501
         # http://127.0.0.1:5000/callback
@@ -22,6 +26,7 @@ class PlaylistMaker():
 
     def authorize(self, code):
         self.__auth_manager__.get_access_token(code)
+        self.authorized = True
         self.__sp__ = spotipy.Spotify(auth_manager=self.__auth_manager__)
         self.user_id= self.__sp__.me()['id']
 
