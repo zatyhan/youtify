@@ -9,13 +9,26 @@
 <body>
     <div class="container">
         <h1>Youtify 🎵</h1>
-        <p>Convert your favorite YouTube music videos to Spotify playlists!</p>
+        <p>Convert your favorite YouTube music videos to Spotify playlists! Home</p>
         
         <form id="playlist-form" action="/home"  method="POST">
-            <p>You are not yet signed in. Please sign in to continue.</p>   
-            <input type="submit" value="Sign in to my spotify">
+            <label for="youtube-url">Enter the YouTube URL:</label>
+            <input type="text" id="youtube-url" name="youtube-url" required>
+            
+            <label for="playlist-name">Enter the name of the playlist you want to create on Spotify:</label>
+            <input type="text" id="playlist-name" name="playlist-name" required>
+            
+            <input type="submit" value="Create my playlist!">
         </form>
         
+        <div id="auth-link"></div>
+        <div id="status-message">
+            <p>{{ auth_status }}</p>
+        </div>
+        <div id="playlist-link">
+            <a href="{{ playlist_url }}" target="_blank">
+                <button>Open my playlist on Spotify</button> </a>
+        </div>
 
     <!-- <script>
         // Placeholder for authentication logic

@@ -1,32 +1,29 @@
 import spotipy
-from spotipy.oauth2 import SpotifyPKCE
+from spotipy.oauth2 import SpotifyOAuth
 import streamlit as st
 import os 
 from dotenv import load_dotenv
 load_dotenv()
 
 class PlaylistMaker():
-    def __init__(self):
+    def __init__(self, cache_handler):
         self.playlist_name = " "
         self.__scope__='playlist-modify-public'
-        self.__clientID__ = st.secrets['SPOTIFY_CLIENT_ID']
+        self.__clientID__ = os.getenv('SPOTIPY_CLIENT_ID')
         self.__scope__='playlist-modify-public'
-        self.redirect_uri= "http://127.0.0.1:5000/callback"
-        self.__auth_manager__ = SpotifyPKCE(client_id=self.__clientID__, redirect_uri=self.redirect_uri, scope=self.__scope__)
+        self.redirect_uri= os.getenv('SPOTIPY_REDIRECT_URI')
+        self.__auth_manager__ = SpotifyOAuth(client_id=self.__clientID__, redirect_uri=self.redirect_uri, scope=self.__scope__, cache_handler=cache_handler, show_dialog=True)
         self.user_id= None
         self.__sp__= None
         self.playlist_id= None
-        self.authorized= False
-        # https://organic-meme-7xpj5v76pjr3xq9j-8501.app.github.dev
-        # http://localhost:8501
-        # http://127.0.0.1:5000/callback
     def get_auth_url(self, state=None):
         url= self.__auth_manager__.get_authorize_url(state=state)
         return url        
 
+    def validate_token(self, token):
+        return self.__auth_manager__.validate_token(token)
     def authorize(self, code):
         self.__auth_manager__.get_access_token(code)
-        self.authorized = True
         self.__sp__ = spotipy.Spotify(auth_manager=self.__auth_manager__)
         self.user_id= self.__sp__.me()['id']
 
