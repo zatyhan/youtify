@@ -55,6 +55,20 @@ button:hover {
     background-color: #218838;
 }
 
+button#playlist-link {
+    padding: 10px;
+    background-color: #4428a7;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button#playlist-link:hover {
+    background-color: #0e113f;
+}
+
+
 #auth-link {
     margin-top: 20px;
     text-align: center;
