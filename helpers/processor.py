@@ -8,13 +8,14 @@ from pytubefix.cli import on_progress
 from io import BytesIO
 import json 
 
+load_dotenv()
+
 class Processor():
     """
     Class to extract audio from youtube video, and recognizing the audio using Shazam API
 
     """
     def __init__(self, yt_url):
-        load_dotenv()
         # shazam api variables
         # self.shazamapi_key = os.getenv('RAPIDAPI_KEY')
         self.shazamapi_key = "20255aac57msh804c236292b3ec2p12abd6jsna3d7d7386a44"
@@ -35,9 +36,6 @@ class Processor():
         
         yt.streams.filter(only_audio=True).first().stream_to_buffer(self.buffer)
 
-
-        # return self.buffer
-
     def video_length(self):
         self.buffer.seek(0)
         audio = AudioSegment.from_file(self.buffer, format="mp4").split_to_mono()[0]
@@ -50,7 +48,14 @@ class Processor():
         audio_data = base64.b64encode(self.buffer.read()).decode('utf-8')
         return audio_data, audio.duration_seconds
     
-    
+    def fingerprint_audio(self, encodedb64, start_time):
+        audio_blob = base64.b64decode(encodedb64)
+        buffer = BytesIO(audio_blob)
+        audio = AudioSegment.from_file(buffer, format="mp4", start_second=start_time, duration=7).split_to_mono()[0]
+        audio_data = base64.b64encode(audio._data).decode("utf-8")
+
+        response = requests.request("POST", self.shazam_endpoint, headers=self.headers, data=audio_data, params=self.querystring)
+
     def recognize_audio(self, start_time=0):
         """
         Recognize audio using Shazam API

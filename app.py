@@ -1,13 +1,22 @@
 from flask import Flask, render_template, url_for, request, redirect, session, jsonify
-from helpers import Processor, PlaylistMaker 
-from dotenv import load_dotenv
 from flask_session import Session
-import os 
-# import jsonify
-import json 
-import spotipy
 from flask_cors import CORS
 import urllib.parse
+
+# miscellaneous, system modules 
+from helpers import PlaylistMaker 
+import requests
+from io import BytesIO
+import os 
+
+# modules for youtube audio extraction
+from dotenv import load_dotenv
+from pytubefix import YouTube
+from pydub import AudioSegment
+import base64
+
+# modules for spotify api 
+import spotipy
 
 app = Flask(__name__)
 
@@ -45,7 +54,6 @@ def home():
     
     try:
         sp.authorize(session['code'])
-        print('authorized')
     except Exception as e:
         return redirect(sp.get_auth_url())
 
@@ -60,13 +68,12 @@ def create_playlist():
     sp = PlaylistMaker(cache_handler=cache_handler)
     try:
         sp.authorize(session['code'])
-        print('authorized')
     except Exception as e:
         print(str(e))
     else:
         try:
-            sp.create_playlist(name)
-            return jsonify({'result': 'Playlist created successfully'})
+            playlist_id= sp.create_playlist(name)
+            return jsonify({'result': 'Playlist created successfully', 'playlist_id': playlist_id}), 200
         except Exception as e:
             print('Failed to create playlist due to error: ', str(e))
             return jsonify({'Error': str(e)})   
@@ -75,52 +82,95 @@ def create_playlist():
 def process_url():
     request_data = request.get_json()
     url = urllib.parse.unquote(request_data)
+    buffer = BytesIO()
 
-    try:
-        tracks = Processor(url)
-
+    try: 
+        yt= YouTube(url)
     except Exception as e:
-        print('Failed to retrieve audio from youtube video due to error: ', str(e))
-        return jsonify({'Error': str(e)})
-    else: 
+        return jsonify({'Error': 'Failed to process URL due to error: ' + str(e)}), 500
+    else:
+        try:
+            yt.streams.filter(only_audio=True).first().stream_to_buffer(buffer)
 
-        try: 
-            tracks.process_url()
+            duration= yt.length
+
+            buffer.seek(0)
+
             print('Youtube URL retrieved and processed')
-            audio_data, duration= tracks.get_audio()
+            
             return jsonify({'result': 'Youtube URL retrieved and processed',
-                            'audio_b64_data': audio_data,
-                            'audio_duration': duration})
+                            'audio_data': base64.b64encode(buffer.read()).decode('utf-8'),
+                            'audio_duration': duration}), 200
 
         except Exception as e:
             print('Failed to process track due to ', str(e))
-            return jsonify({'Error': str(e)})
+            return jsonify({'result': 'Failed to process track due to '+ str(e)}), 500
     
 
-@app.route('/recognize-tracks', methods=['POST'])
-def recognize_tracks():
-    start_time=0
-    video_length= tracks.video_length()
-    track_ids= set()
-
-    while start_time< video_length:
-        try:
-            print(f"\nFound {len(track_ids)} {'tracks' if len(track_ids)>1 else 'track'}. Recognizing the next track...\n")
-            print('\nRecognizing the next track...\n')
-            isrc, track_title=  tracks.recognize_audio(start_time=start_time)
-            print("Looking for: ", track_title)
-            track_id, found_title, duration= sp.lookup(isrc)
-            track_ids.add(track_id)
-
-            start_time+=duration +5
-
-        except KeyboardInterrupt:
-            print('The [Ctrl+C] key was pressed. Exiting...')
-            raise SystemExit
+@app.route('/recognize-track', methods=['POST'])
+def recognize_track():
+    try:
+        request_data = request.get_json()
+        audio_blob= base64.b64decode(request_data['audio'])
+        start_time= request_data['start_time']
+        buffer= BytesIO(audio_blob)
+        buffer.seek(0)
+        shazamapi_key = "20255aac57msh804c236292b3ec2p12abd6jsna3d7d7386a44"
+        shazam_endpoint = "https://shazam.p.rapidapi.com/songs/v2/detect"
+        querystring = {"timezone":"America/Chicago","locale":"en-US"}
+        headers = {
+            "x-rapidapi-key": shazamapi_key,
+            "x-rapidapi-host": "shazam.p.rapidapi.com",
+            "Content-Type": "text/plain"
+        }
+        audio = AudioSegment.from_file(buffer, format="mp4", start_second=start_time, duration=7).split_to_mono()[0]
+        audio_data = base64.b64encode(audio._data).decode('utf-8')
         
-        except Exception as e:
-            print('Track not found due to error: ', str(e))
-            start_time+=60*2.5
+        response = requests.request("POST", shazam_endpoint, headers= headers, data=audio_data, params=querystring)
+        if response.status_code == 200:
+            text= response.json()
+            if 'track' in text and 'isrc' in text['track']: 
+                return jsonify({'isrc':text['track']['isrc'], 'title':text['track']['title']}), 200
+            print(response.text)
+            return jsonify({'error': 'Failed to recognize audio'}), 500
+        else:
+            print(text)
+            return jsonify({'error': 'Error: '+ str(response.status_code)}), 500
+    except Exception as e:
+        print('Failed to recognize audio due to error: ', str(e))
+        return jsonify({'error': 'Failed to recognize audio due to error: ' + str(e)}), 500
+        
+@app.route('/add-to-playlist', methods=['POST'])
+def add_to_playlist(): 
+    request_data = request.get_json()
+    print('request data: ', request_data)
+    isrc= request_data['isrc']
+    playlist_id= request_data['playlist_id']
+    print('isrc: ', isrc)
+    print('playlist_id: ', playlist_id) 
+    cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
+    sp = PlaylistMaker(cache_handler=cache_handler)
+
+    try:
+        sp.authorize(session['code'])
+    except Exception as e:
+        print('Authorization error: ', str(e))
+        return jsonify({'result': 'Authorization error: ' + str(e), 'track_id': None, 'duration': 60*2.5}), 500
+    else:
+        track_id, duration= sp.lookup(isrc)
+
+        if track_id: 
+            sp.add_to_playlist(track_id, playlist_id)
+            return jsonify({'result': 'Track added to playlist', 'track_id': track_id, 'duration': duration}), 200
+        else:
+            return jsonify({'result': 'Track not found by spotify', 'track_id': None, 'duration': 60*2.5}), 200
+    try:
+        sp.add_to_playlist(track_id, playlist_id)
+    except Exception as e:
+        print(f"Error adding track to playlist: {str(e)}")
+        return jsonify({'result': 'Error adding track to playlist: ' + str(e), 'track_id': track_id, 'duration': duration}), 500
+    else:
+        return jsonify({'result': 'Track added to playlist', 'track_id': track_id, 'duration': duration}), 200
 
 @app.route('/callback')
 def callback():
@@ -131,65 +181,80 @@ def callback():
         session['code']= request.args['code']
         return redirect(url_for('home'))
 
-@app.route('/recognise')
-def recognise():
+@app.route('/get-playlist-url', methods=['POST'])
+def get_playlist_url():
+    request_data = request.get_json()
+    playlist_id = request_data['playlist_id']
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     sp = PlaylistMaker(cache_handler=cache_handler)
-
     try:
-        sp.create_playlist(session['playlist_name'])
-        print('Playlist created successfully')
+        sp.authorize(session['code'])
     except Exception as e:
-        print('Failed to create playlist due to error: ', str(e))
-        session.clear()
-        return render_template('index.html', auth_status='Failed to create playlist. Please enter the details again.')
+        print('Authorization error: ', str(e))
+        return jsonify({'result': 'Authorization error: ' + str(e), 'playlist_url': None}), 500
     else:
-        print('Retrieving audio from youtube video...')
+        playlist_url = sp.get_playlist(playlist_id) 
+        return jsonify({'playlist_url': playlist_url}), 200
 
-        try:
-            tracks = Processor(session['yt_url'])
+# @app.route('/recognise')
+# def recognise():
+#     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
+#     sp = PlaylistMaker(cache_handler=cache_handler)
 
-        except Exception as e:
-            print('Failed to retrieve audio from youtube video due to error: ', str(e))
+#     try:
+#         sp.create_playlist(session['playlist_name'])
+#         print('Playlist created successfully')
+#     except Exception as e:
+#         print('Failed to create playlist due to error: ', str(e))
+#         session.clear()
+#         return render_template('index.html', auth_status='Failed to create playlist. Please enter the details again.')
+#     else:
+#         print('Retrieving audio from youtube video...')
 
-        else: 
-            try: 
-                tracks.process_url()
-                print('Youtube URL retrieved and processed')
-            except Exception as e:
-                print('Failed to process track due to ', str(e))
-                raise SystemExit
-            else:
-                start_time=0
-                video_length= tracks.video_length()
-                track_ids= set()
+#         try:
+#             tracks = Processor(session['yt_url'])
 
-                while start_time< video_length:
-                    try:
-                        print(f"\nFound {len(track_ids)} {'tracks' if len(track_ids)>1 else 'track'}. Recognizing the next track...\n")
-                        print('\nRecognizing the next track...\n')
-                        isrc, track_title=  tracks.recognize_audio(start_time=start_time)
-                        print("Looking for: ", track_title)
-                        track_id, found_title, duration= sp.lookup(isrc)
-                        track_ids.add(track_id)
+#         except Exception as e:
+#             print('Failed to retrieve audio from youtube video due to error: ', str(e))
 
-                        start_time+=duration +5
+#         else: 
+#             try: 
+#                 tracks.process_url()
+#                 print('Youtube URL retrieved and processed')
+#             except Exception as e:
+#                 print('Failed to process track due to ', str(e))
+#                 raise SystemExit
+#             else:
+#                 start_time=0
+#                 video_length= tracks.video_length()
+#                 track_ids= set()
 
-                    except KeyboardInterrupt:
-                        print('The [Ctrl+C] key was pressed. Exiting...')
-                        raise SystemExit
+#                 while start_time< video_length:
+#                     try:
+#                         print(f"\nFound {len(track_ids)} {'tracks' if len(track_ids)>1 else 'track'}. Recognizing the next track...\n")
+#                         print('\nRecognizing the next track...\n')
+#                         isrc, track_title=  tracks.recognize_audio(start_time=start_time)
+#                         print("Looking for: ", track_title)
+#                         track_id, found_title, duration= sp.lookup(isrc)
+#                         track_ids.add(track_id)
+
+#                         start_time+=duration +5
+
+#                     except KeyboardInterrupt:
+#                         print('The [Ctrl+C] key was pressed. Exiting...')
+#                         raise SystemExit
                     
-                    except Exception as e:
-                        print('Track not found due to error: ', str(e))
-                        start_time+=60*2.5
+#                     except Exception as e:
+#                         print('Track not found due to error: ', str(e))
+#                         start_time+=60*2.5
                 
-                for t in track_ids:
-                    sp.add_to_playlist(t)
+#                 for t in track_ids:
+#                     sp.add_to_playlist(t)
                 
-                playlist_url= sp.get_playlist()['external_urls']['spotify']
-                return render_template('home.html', auth_status='Authenticated', playlist_url=playlist_url)
+#                 playlist_url= sp.get_playlist()['external_urls']['spotify']
+#                 return render_template('home.html', auth_status='Authenticated', playlist_url=playlist_url)
 
-    return 'text'
+#     return 'text'
 
 if __name__ == '__main__':
     # app.run(debug=True)

@@ -15,7 +15,7 @@
         
         <form id="playlist-form">
             <label for="youtube-url">Enter the YouTube URL:</label>
-            <input type="text" id="youtube-url" name="youtube-url" required>
+            <input type="text" id="youtube-url" name="youtube-url" value="https://www.youtube.com/watch?v=fLi0EJfi_vg" required>
             
             <label for="playlist-name">Enter the name of the playlist you want to create on Spotify:</label>
             <input type="text" id="playlist-name" name="playlist-name" required>
@@ -30,18 +30,9 @@
         </div>
     </div>
         
-        <!-- <section class="pyscript"> -->
-            <!-- <div id="playlist-link">
-                <a href="{{ playlist_url }}" target="_blank">
-                    <button>Open my playlist on Spotify</button> </a>
-                </div> -->
-                
-                
-            <!-- <script type="py-config">
-                paths = ['./helpers/processor.py']
-            </script> -->
-            <!-- <script type="py" src="./static/script.py" config="./static/pyscript.toml"></script> -->
-        <!-- </section> -->
+    <div class="playlist-link">
+        <button id="playlist-link">View my playlist on Spotify →</button>
+    </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="./static/script.js"></script>  
 </body>

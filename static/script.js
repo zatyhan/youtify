@@ -1,18 +1,52 @@
 $(document).ready(function() {
-    $.fn.base64ToArrayBuffer = function(base64) {
-        const binaryString = atob(base64);
-    
-        const length = binaryString.length;
-        const bytes = new Uint8Array(length);
-    
-        for (let i = 0; i < length; i++) {
-            bytes[i] = binaryString.charCodeAt(i);
-        }
-    
-        return bytes.buffer;
+    $.recognizeTrack = function(startTime, duration, audio, playlistId, trackIds) {
+        $('#status-message').text(`Recognizing...`);
+        $.ajax(
+            {
+                type: 'POST',
+                url: '/recognize-track',
+                data: JSON.stringify({ 'start_time': startTime, 'audio': audio }),
+                contentType: 'application/json',
+                dataType: 'json',
+            }
+        ).done(function(result) {
+            console.log(`Recognized track from shazam: ${result['title']}`);
+            $('#status-message').text(`Recognized track: ${result['title']}`);
+                // ajax call to add to playlist
+            $.ajax(
+                {
+                    type: 'POST',
+                    url : '/add-to-playlist',
+                    data: JSON.stringify({'isrc': result['isrc'], 'playlist_id': playlistId}),
+                    contentType: 'application/json',
+                    dataType: 'json',
+                }
+            ).done(function(result) {
+                // will log added to playlist
+                $('#status-message').text(result['result']);
+                result['track_id'] ? trackIds.push(result['track_id']) : null;
+                var trackDuration = result['duration'];
+                startTime += trackDuration+30;
+
+                if (startTime< duration) {
+                    $.recognizeTrack(startTime, duration, audio, playlistId, trackIds);
+                    console.log(`New start time: ${startTime}`);
+                    console.log(`Track Ids: ${trackIds}`);
+                }
+
+                else {
+                    $('#status-message').text('Done recognizing all tracks');
+                    console.log('All tracks added to playlist');
+                }
+                
+            })
+        }); 
     };
     
-    $('button').click( function(event) {
+    $('#create').click( function(event) 
+    {
+        $('#playlist-link').hide();
+
         $('[required]').each(function (i, el) {
             if ($(el).val() == '' || $(el).val() == undefined) {
                 alert('Please fill in all mandatory fields!');
@@ -23,10 +57,10 @@ $(document).ready(function() {
         $('#status-message').text('Creating playlist...');
 
         var playlistName = $('#playlist-name').val();
-
+        var playlistId= null;
         console.log(playlistName);
 
-        var createPlaylist= $.ajax(
+        $.ajax(
             { 
                 type: 'POST',
                 url: '/create-playlist',
@@ -35,15 +69,12 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(result) {
                 $('#status-message').text(result['result'])
-                console.log(result)
+                playlistId = result['playlist_id'];
             },
             error: function(result) {
                 $('#status-message').text(result['result'])
             }
         })
-        createPlaylist.fail(function(result) {
-            throw new Error(result['error']);
-        });
 
         $('#status-message').text('Finding and retrieving audio from youtube...');
 
@@ -51,47 +82,41 @@ $(document).ready(function() {
 
         console.log(youtubeUrl);    
 
-        var createProcessor= $.ajax(
+        $.ajax(
             { 
                 type: 'POST',
                 url: '/process-yt-url',
-            data: JSON.stringify(encodeURIComponent(youtubeUrl)),
-            contentType: 'application/json',
-            dataType: 'json',
-            success: function(result) {
+                data: JSON.stringify(encodeURIComponent(youtubeUrl)),
+                contentType: 'application/json',
+                dataType: 'json',
+            }).done(function(result) 
+            {
                 $('#status-message').text(result['result'])
-                console.log(result)
-            },
-            error: function(result) {
-                $('#status-message').text(result['error'])
-            }
-        });
-
-        createPlaylist.done(function(result) {
-            // convert base64 to buffer
-            var audio_data = result['audio_b64_data'];
-            var audio_blob = $.fn.base64ToArrayBuffer(audio_data);
-            var audio_duration = result['audio_duration'];
-
-            // send post request to shazam api on loop, add isrcs and titles to array
-            
-            // send flask request for isrc lookup
-            // add track id to array 
-            //  add track to playlist
-        });
-        createProcessor.fail(function(result) {
-            throw new Error(result['error']);
-        });
-        
-    
-
-
-
-
-
-
+                // console.log(result)
+                
+                var startTime = 100;
+                const duration = result['audio_duration'];
+                const audio= result['audio_data'];
+                var trackIds = [];
+                var playlistUrl= null;
+                
+                $.when($.recognizeTrack(startTime, duration, audio, playlistId, trackIds)).done(function() 
+                {
+                    $.ajax(
+                        {
+                            type: 'POST',
+                            url: '/get-playlist-url',
+                            data: JSON.stringify({'playlist_id': playlistId}),
+                            contentType: 'application/json',
+                            dataType: 'json',
+                        }
+                    ).done(function(result) {
+                        playlistUrl = result['playlist_url'];
+                        console.log(playlistUrl);
+                        $('#playlist-link').attr('href', playlistUrl);
+                        $('#playlist-link').show();
+                    });
+                });
+            });
     });
-
-
-
 });
