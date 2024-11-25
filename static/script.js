@@ -2,6 +2,7 @@ $(document).ready(function() {
     $('#playlist-link').hide();
     
     $.recognizeTrack = function(startTime, duration, audio, playlistId, trackIds) {
+
         $('#status-message').text(`Recognizing...`);
         return new Promise((resolve, reject) =>
         {
@@ -14,8 +15,9 @@ $(document).ready(function() {
                 dataType: 'json',
             }
         ).done(function(result) {
-            console.log(`Recognized track from shazam: ${result['title']}`);
-            $('#status-message').text(`Recognized track: ${result['title']}`);
+            var trackTitle= result['title']
+            console.log(`Recognized track from shazam: ${trackTitle}`);
+            $('#status-message').text(`Recognized track: ${trackTitle}`);
                 // ajax call to add to playlist
             $.ajax(
                 {
@@ -31,6 +33,12 @@ $(document).ready(function() {
                 result['track_id'] ? trackIds.push(result['track_id']) : null;
                 var trackDuration = result['duration'];
                 startTime += trackDuration+30;
+                
+                $('#messages').append(`<p>Added ${trackTitle} to playlist</p>`);
+
+                if (trackIds.length > 0) {
+                    $('#progress').text(`Found ${trackIds.length} ${trackIds.length==1 ? 'track': 'tracks'} so far...`);
+                }
 
                 if (startTime< duration) {
                     $.recognizeTrack(startTime, duration, audio, playlistId, trackIds)
@@ -45,6 +53,9 @@ $(document).ready(function() {
                     resolve();
                 }
             }).fail(reject);
+            if (startTime >= duration) {
+                resolve();
+            };
         }).fail(reject); 
         });
     };
@@ -64,6 +75,8 @@ $(document).ready(function() {
 
         var playlistName = $('#playlist-name').val();
         var playlistId= null;
+        var youtubeUrl = $('#youtube-url').val();
+        var playlistUrl= null;
         console.log(playlistName);
 
         $.ajax(
@@ -84,8 +97,6 @@ $(document).ready(function() {
 
         $('#status-message').text('Finding and retrieving audio from youtube...');
 
-        var youtubeUrl = $('#youtube-url').val();
-
         console.log(youtubeUrl);    
 
         $.ajax(
@@ -100,31 +111,36 @@ $(document).ready(function() {
                 $('#status-message').text(result['result'])
                 // console.log(result)
                 
-                var startTime = 0;
+                var startTime = 1000;
                 const duration = result['audio_duration'];
                 const audio= result['audio_data'];
                 var trackIds = [];
-                var playlistUrl= null;
                 
                 $.recognizeTrack(startTime, duration, audio, playlistId, trackIds).then(function() 
                 {
-                    $.ajax(
-                        {
-                            type: 'POST',
-                            url: '/get-playlist-url',
-                            data: JSON.stringify({'playlist_id': playlistId}),
-                            contentType: 'application/json',
-                            dataType: 'json',
-                        }
-                    ).done(function(result) {
-                        playlistUrl = result['playlist_url'];
-                        console.log(playlistUrl);
-                        $('#playlist-link').attr('href', playlistUrl);
-                        $('#playlist-link').show();
-                    });
+                    playlistUrl= `https://open.spotify.com/playlist/${playlistId}`;
+                    $('#playlist-link').attr('href', playlistUrl);
+                    $('#playlist-link').show();
+                    // $.ajax(
+                    //     {
+                    //         type: 'POST',
+                    //         url: '/get-playlist-url',
+                    //         data: JSON.stringify({'playlist_id': playlistId}),
+                    //         contentType: 'application/json',
+                    //         dataType: 'json',
+                    //     }
+                    // ).done(function(result) {
+                    //     playlistUrl = result['playlist_url'];
+                    //     console.log(playlistUrl);
+                    //     $('#playlist-link').attr('href', playlistUrl);
+                    //     $('#playlist-link').show();
+                    // });
                 }).catch((error) => {
                     console.error(error);
                 });
+            });
+            $('button#playlist-link').click(function() {
+                window.open(playlistUrl, '_blank');
             });
     });
 });
