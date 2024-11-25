@@ -100,7 +100,7 @@ $(document).ready(function() {
                 $('#status-message').text(result['result'])
                 // console.log(result)
                 
-                var startTime = 330;
+                var startTime = 0;
                 const duration = result['audio_duration'];
                 const audio= result['audio_data'];
                 var trackIds = [];
