@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <!-- <script type="module" src="https://pyscript.net/releases/2024.10.2/core.js"></script> -->
  
     <title>Youtify 🎵</title>
 </head>
@@ -25,14 +24,17 @@
         <button id="create">Create my playlist!</button>
         
         <div id="auth-link"></div>
-        <div id="status-message">
-            <p>{{ auth_status }}</p>
+        <div id="messages">
+            <p id="progress"></p>
+            <p id="status-message">{{ auth_status }}</p>
+            <br>
+
+        </div>
+        <div class="playlist-link">
+            <button id="playlist-link">View my playlist on Spotify →</button>
         </div>
     </div>
         
-    <div class="playlist-link">
-        <button id="playlist-link">View my playlist on Spotify →</button>
-    </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="./static/script.js"></script>  
 </body>
