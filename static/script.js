@@ -1,7 +1,11 @@
 $(document).ready(function() {
+    $('#playlist-link').hide();
+    
     $.recognizeTrack = function(startTime, duration, audio, playlistId, trackIds) {
         $('#status-message').text(`Recognizing...`);
-        $.ajax(
+        return new Promise((resolve, reject) =>
+        {
+            $.ajax(
             {
                 type: 'POST',
                 url: '/recognize-track',
@@ -29,18 +33,23 @@ $(document).ready(function() {
                 startTime += trackDuration+30;
 
                 if (startTime< duration) {
-                    $.recognizeTrack(startTime, duration, audio, playlistId, trackIds);
+                    $.recognizeTrack(startTime, duration, audio, playlistId, trackIds)
+                    .then(resolve)
+                    .catch(reject);
                     console.log(`New start time: ${startTime}`);
                     console.log(`Track Ids: ${trackIds}`);
                 }
-
                 else {
                     $('#status-message').text('Done recognizing all tracks');
                     console.log('All tracks added to playlist');
+                    resolve();
                 }
-                
-            })
-        }); 
+            }).fail(reject);
+            // if (startTime >= duration) {
+            //     resolve();
+            // };
+        }).fail(reject); 
+        });
     };
     
     $('#create').click( function(event) 
@@ -94,13 +103,13 @@ $(document).ready(function() {
                 $('#status-message').text(result['result'])
                 // console.log(result)
                 
-                var startTime = 100;
+                var startTime = 330;
                 const duration = result['audio_duration'];
                 const audio= result['audio_data'];
                 var trackIds = [];
                 var playlistUrl= null;
                 
-                $.when($.recognizeTrack(startTime, duration, audio, playlistId, trackIds)).done(function() 
+                $.recognizeTrack(startTime, duration, audio, playlistId, trackIds).then(function() 
                 {
                     $.ajax(
                         {
