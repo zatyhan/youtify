@@ -143,11 +143,11 @@ def recognize_track():
 @app.route('/add-to-playlist', methods=['POST'])
 def add_to_playlist(): 
     request_data = request.get_json()
-    print('request data: ', request_data)
+    # print('request data: ', request_data)
     isrc= request_data['isrc']
     playlist_id= request_data['playlist_id']
-    print('isrc: ', isrc)
-    print('playlist_id: ', playlist_id) 
+    # print('isrc: ', isrc)
+    # print('playlist_id: ', playlist_id) 
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     sp = PlaylistMaker(cache_handler=cache_handler)
 
