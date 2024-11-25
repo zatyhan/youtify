@@ -37,16 +37,19 @@ class Processor():
 
 
         # return self.buffer
-    def get_audio(self):
-        self.buffer.seek(0)  # Make sure to seek to the start of the buffer
-        audio_data = base64.b64encode(self.buffer.read()).decode('utf-8')
-        return audio_data
-    
+
     def video_length(self):
         self.buffer.seek(0)
         audio = AudioSegment.from_file(self.buffer, format="mp4").split_to_mono()[0]
 
         return audio.duration_seconds
+    
+    def get_audio(self):
+        self.buffer.seek(0)  # Make sure to seek to the start of the buffer
+        audio = AudioSegment.from_file(self.buffer, format="mp4").split_to_mono()[0]
+        audio_data = base64.b64encode(self.buffer.read()).decode('utf-8')
+        return audio_data, audio.duration_seconds
+    
     
     def recognize_audio(self, start_time=0):
         """

@@ -87,7 +87,10 @@ def process_url():
         try: 
             tracks.process_url()
             print('Youtube URL retrieved and processed')
-            return jsonify({'result': 'Youtube URL retrieved and processed'})
+            audio_data, duration= tracks.get_audio()
+            return jsonify({'result': 'Youtube URL retrieved and processed',
+                            'audio_b64_data': audio_data,
+                            'audio_duration': duration})
 
         except Exception as e:
             print('Failed to process track due to ', str(e))
