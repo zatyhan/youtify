@@ -35,8 +35,13 @@ class Processor():
         
         yt.streams.filter(only_audio=True).first().stream_to_buffer(self.buffer)
 
-        # return self.buffer
 
+        # return self.buffer
+    def get_audio(self):
+        self.buffer.seek(0)  # Make sure to seek to the start of the buffer
+        audio_data = base64.b64encode(self.buffer.read()).decode('utf-8')
+        return audio_data
+    
     def video_length(self):
         self.buffer.seek(0)
         audio = AudioSegment.from_file(self.buffer, format="mp4").split_to_mono()[0]
@@ -63,10 +68,3 @@ class Processor():
             return isrc, text['track']["title"]
         else:
             raise Exception('Failed to recognize audio')
-        # return text['track']["title"], text['track']['subtitle'], text['track']['sections'][0]['metadata'][0]['text']
-
-# pro= Processor("https://www.youtube.com/watch?v=aa8gI5ZVVhs") # nct dream
-# pro= Processor("https://www.youtube.com/watch?v=Dd1ILK2EkxI") # nct 127
-# track= pro.process_url()
-# isrc, track_title= pro.recognize_audio()
-# print(track_title, isrc)

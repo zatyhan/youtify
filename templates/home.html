@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- <script type="module" src="https://pyscript.net/releases/2024.10.2/core.js"></script> -->
+ 
     <title>Youtify 🎵</title>
 </head>
 <body>
@@ -11,33 +13,36 @@
         <h1>Youtify 🎵</h1>
         <p>Convert your favorite YouTube music videos to Spotify playlists! Home</p>
         
-        <form id="playlist-form" action="/home"  method="POST">
+        <form id="playlist-form">
             <label for="youtube-url">Enter the YouTube URL:</label>
             <input type="text" id="youtube-url" name="youtube-url" required>
             
             <label for="playlist-name">Enter the name of the playlist you want to create on Spotify:</label>
             <input type="text" id="playlist-name" name="playlist-name" required>
             
-            <input type="submit" value="Create my playlist!">
+            <!-- <input type="submit" id="create" value="Create my playlist!"> -->
         </form>
+        <button id="create">Create my playlist!</button>
         
         <div id="auth-link"></div>
         <div id="status-message">
             <p>{{ auth_status }}</p>
         </div>
-        <div id="playlist-link">
-            <a href="{{ playlist_url }}" target="_blank">
-                <button>Open my playlist on Spotify</button> </a>
-        </div>
-
-    <!-- <script>
-        // Placeholder for authentication logic
-        document.getElementById('playlist-form').onsubmit = function(event) {
-            event.preventDefault();
-            const authLink = "<a href='#'>Click me to authenticate!</a>";
-            document.getElementById('auth-link').innerHTML = authLink;
-            document.getElementById('status-message').innerText = 'Waiting for authentication...';
-        };
-    </script> -->
+    </div>
+        
+        <!-- <section class="pyscript"> -->
+            <!-- <div id="playlist-link">
+                <a href="{{ playlist_url }}" target="_blank">
+                    <button>Open my playlist on Spotify</button> </a>
+                </div> -->
+                
+                
+            <!-- <script type="py-config">
+                paths = ['./helpers/processor.py']
+            </script> -->
+            <!-- <script type="py" src="./static/script.py" config="./static/pyscript.toml"></script> -->
+        <!-- </section> -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="./static/script.js"></script>  
 </body>
 </html>
