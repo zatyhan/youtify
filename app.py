@@ -24,6 +24,7 @@ load_dotenv()
 app.secret_key= os.getenv('SECRET_KEY') 
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = './.flask_session/'
+app.config['DEBUG'] = os.getenv('FLASK_DEBUG')
 Session(app)
 CORS(app)
 
@@ -258,4 +259,4 @@ def get_playlist_url():
 
 if __name__ == '__main__':
     # app.run(debug=True)
-    app.run(debug=True, threaded=True, port=int(os.environ.get("PORT", os.environ.get("SPOTIPY_REDIRECT_URI", 8080).split(":")[-1])))
+    app.run()
