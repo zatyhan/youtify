@@ -45,9 +45,6 @@ $(document).ready(function() {
                     resolve();
                 }
             }).fail(reject);
-            // if (startTime >= duration) {
-            //     resolve();
-            // };
         }).fail(reject); 
         });
     };
@@ -125,6 +122,8 @@ $(document).ready(function() {
                         $('#playlist-link').attr('href', playlistUrl);
                         $('#playlist-link').show();
                     });
+                }).catch((error) => {
+                    console.error(error);
                 });
             });
     });
