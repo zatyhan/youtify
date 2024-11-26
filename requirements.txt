@@ -79,10 +79,7 @@ pycparser==2.22
 pydeck==0.9.1
 pydub==0.25.1
 Pygments==2.18.0
-pyodide-py==0.26.4
 pyparsing==3.0.9
-pyscript==0.3.3
-PySocks==1.7.1
 python-dateutil==2.9.0
 python-dotenv==1.0.1
 pytubefix==8.2.0
