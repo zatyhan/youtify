@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Youtify 🎵</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Youtify 🎵</h1>
+        <p>Convert your favorite YouTube music videos to Spotify playlists!</p>
+        
+        <form id="playlist-form" action="/"  method="POST">
+            <p>You are not yet signed in. Please sign in to continue.</p>   
+            <input type="submit" value="Sign in to my spotify">
+        </form>
+        
+
+    <!-- <script>
+        // Placeholder for authentication logic
+        document.getElementById('playlist-form').onsubmit = function(event) {
+            event.preventDefault();
+            const authLink = "<a href='#'>Click me to authenticate!</a>";
+            document.getElementById('auth-link').innerHTML = authLink;
+            document.getElementById('status-message').innerText = 'Waiting for authentication...';
+        };
+    </script> -->
+</body>
+</html>

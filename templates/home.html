@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+ 
+    <title>Youtify 🎵</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Youtify 🎵</h1>
+        <p>Convert your favorite YouTube music videos to Spotify playlists! Home</p>
+        
+        <form id="playlist-form">
+            <label for="youtube-url">Enter the YouTube URL:</label>
+            <input type="text" id="youtube-url" name="youtube-url" value="https://www.youtube.com/watch?v=fLi0EJfi_vg" required>
+            
+            <label for="playlist-name">Enter the name of the playlist you want to create on Spotify:</label>
+            <input type="text" id="playlist-name" name="playlist-name" required>
+            
+            <!-- <input type="submit" id="create" value="Create my playlist!"> -->
+        </form>
+        <button id="create">Create my playlist!</button>
+        
+        <div id="auth-link"></div>
+        <div id="messages">
+            <p id="progress"></p>
+            <p id="status-message">{{ auth_status }}</p>
+            <br>
+
+        </div>
+        <div class="playlist-link">
+            <button id="playlist-link">View my playlist on Spotify →</button>
+        </div>
+    </div>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="./static/script.js"></script>  
+</body>
+</html>

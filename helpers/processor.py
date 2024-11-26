@@ -7,7 +7,9 @@ from pytubefix import YouTube
 from pytubefix.cli import on_progress
 from io import BytesIO
 import json 
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class Processor():
     """
@@ -41,14 +43,26 @@ class Processor():
         # , use_po_token=True, po_token_verifier=self.get_token() 
         yt.streams.filter(only_audio=True).first().stream_to_buffer(self.buffer)
 
-        # return self.buffer
-
     def video_length(self):
         self.buffer.seek(0)
         audio = AudioSegment.from_file(self.buffer, format="mp4").split_to_mono()[0]
 
         return audio.duration_seconds
     
+    def get_audio(self):
+        self.buffer.seek(0)  # Make sure to seek to the start of the buffer
+        audio = AudioSegment.from_file(self.buffer, format="mp4").split_to_mono()[0]
+        audio_data = base64.b64encode(self.buffer.read()).decode('utf-8')
+        return audio_data, audio.duration_seconds
+    
+    def fingerprint_audio(self, encodedb64, start_time):
+        audio_blob = base64.b64decode(encodedb64)
+        buffer = BytesIO(audio_blob)
+        audio = AudioSegment.from_file(buffer, format="mp4", start_second=start_time, duration=7).split_to_mono()[0]
+        audio_data = base64.b64encode(audio._data).decode("utf-8")
+
+        response = requests.request("POST", self.shazam_endpoint, headers=self.headers, data=audio_data, params=self.querystring)
+
     def recognize_audio(self, start_time=0):
         """
         Recognize audio using Shazam API
