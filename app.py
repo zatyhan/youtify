@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for, request, redirect, session, j
 from flask_session import Session
 import redis 
 from flask_cors import CORS
+# from flask_caching import Cache
 import urllib.parse
 
 # miscellaneous, system modules 
@@ -20,6 +21,8 @@ import base64
 import spotipy
 
 app = Flask(__name__)
+app.config.from_object('config.BaseConfig')
+
 redis_db = redis.Redis(host='localhost', port=6379)
 
 load_dotenv()
@@ -30,9 +33,7 @@ app.config['SESSION_TYPE'] = 'redis'
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNER'] = True
 # app.config['SESSION_FILE_DIR'] = './.flask_session/'
-app.config['SESSION_REDIS'] = redis.from_url('redis://127.0.0.1:6379')
-
-
+# app.config['SESSION_REDIS'] = redis.from_url('redis://127.0.0.1:6379')
 app.config['DEBUG'] = os.getenv('FLASK_DEBUG')
 Session(app)
 CORS(app)
