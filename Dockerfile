@@ -6,7 +6,7 @@
 
 # Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
 
-ARG PYTHON_VERSION=3.11
+ARG PYTHON_VERSION=3.10
 FROM python:${PYTHON_VERSION}-slim as base
 
 # Prevents Python from writing pyc files.
@@ -15,12 +15,6 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Keeps Python from buffering stdout and stderr to avoid situations where
 # the application crashes without emitting any logs due to buffering.
 ENV PYTHONUNBUFFERED=1
-
-ENV SECRET_KEY="c27e1b5345b9cd9a8443fa1fee4c84493e8f96208531323e3e7cbef3ae8648d4"
-ENV RAPIDAPI_KEY="20255aac57msh804c236292b3ec2p12abd6jsna3d7d7386a44"
-ENV SPOTIPY_CLIENT_ID="d3eb6ef85c20439d89f4c6b100024b20"
-ENV SPOTIPY_CLIENT_SECRET="4e00a9fa8ddf46388b293490d3cc5465"
-ENV SPOTIPY_REDIRECT_URI="http://127.0.0.1:5000/callback"
 
 WORKDIR /app
 

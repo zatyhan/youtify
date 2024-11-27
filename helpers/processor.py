@@ -2,7 +2,7 @@ import requests
 from pydub import AudioSegment
 import os
 import base64
-import streamlit as st
+# import streamlit as st
 from pytubefix import YouTube
 from pytubefix.cli import on_progress
 from io import BytesIO
@@ -18,7 +18,7 @@ class Processor():
     """
     def __init__(self, yt_url):
         # shazam api variables
-        self.shazamapi_key = st.secrets['RAPIDAPI_KEY']
+        self.shazamapi_key = os.getenv('RAPIDAPI_KEY')
         self.shazam_endpoint = "https://shazam.p.rapidapi.com/songs/v2/detect"
         self.querystring = {"timezone":"America/Chicago","locale":"en-US"}
         self.headers = {
@@ -30,12 +30,12 @@ class Processor():
         self.yt_url = yt_url
         self.buffer = None
 
-    def get_token(self):
-        print('visitor data token: ', st.secrets['VISITOR_DATA'])
-        print('po token: ', st.secrets['PO_TOKEN'])
-        def verifier():
-            return (st.secrets['VISITOR_DATA'], st.secrets['PO_TOKEN'])
-        return verifier
+    # def get_token(self):
+    #     print('visitor data token: ', st.secrets['VISITOR_DATA'])
+    #     print('po token: ', st.secrets['PO_TOKEN'])
+    #     def verifier():
+    #         return (st.secrets['VISITOR_DATA'], st.secrets['PO_TOKEN'])
+    #     return verifier
     
     def process_url(self):
         self.buffer = BytesIO()
