@@ -7,3 +7,4 @@ class BaseConfig(object):
     CACHE_REDIS_DB = os.environ['CACHE_REDIS_DB']
     CACHE_REDIS_URL = os.environ['CACHE_REDIS_URL']
     CACHE_DEFAULT_TIMEOUT = os.environ['CACHE_DEFAULT_TIMEOUT']
+    SESSION_TYPE = os.environ['SESSION_TYPE']
