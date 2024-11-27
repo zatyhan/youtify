@@ -1,4 +1,5 @@
 import os
+import redis
 
 class BaseConfig(object):
     CACHE_TYPE = os.environ['CACHE_TYPE']
@@ -8,3 +9,6 @@ class BaseConfig(object):
     CACHE_REDIS_URL = os.environ['CACHE_REDIS_URL']
     CACHE_DEFAULT_TIMEOUT = os.environ['CACHE_DEFAULT_TIMEOUT']
     SESSION_TYPE = os.environ['SESSION_TYPE']
+    SESSION_PERMANENT = os.environ['SESSION_PERMANENT']
+    SESSION_USE_SIGNER = os.environ['SESSION_USE_SIGNER']
+    SESSION_REDIS = redis.from_url(os.environ['SESSION_REDIS'])

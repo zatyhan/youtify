@@ -29,12 +29,12 @@ redis_db = redis.Redis(host='localhost', port=6379)
 load_dotenv()
 
 # configuring redis
-app.config['SESSION_TYPE'] = 'redis'
-app.config['SESSION_PERMANENT'] = False
-app.config['SESSION_USE_SIGNER'] = True
+# app.config['SESSION_TYPE'] = 'redis'
+# app.config['SESSION_PERMANENT'] = False
+# app.config['SESSION_USE_SIGNER'] = True
 # # app.config['SESSION_FILE_DIR'] = './.flask_session/'
 #  connect to tcp socket via redis://
-app.config['SESSION_REDIS'] = redis.from_url('redis://localhost:6379/0')
+# app.config['SESSION_REDIS'] = redis.from_url('redis://localhost:6379/0')
 app.config['DEBUG'] = os.getenv('FLASK_DEBUG')
 Session(app)
 CORS(app)
