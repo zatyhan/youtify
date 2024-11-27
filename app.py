@@ -24,7 +24,7 @@ app = Flask(__name__)
 app.config.from_object('config.BaseConfig')
 
 # if set to localhost, can run on local machine with the redis server running on docker 
-redis_db = redis.Redis(host='localhost', port=6379) 
+redis_db = redis.Redis(host='redis', port=6379) 
 
 load_dotenv()
 
@@ -32,9 +32,9 @@ load_dotenv()
 # app.config['SESSION_TYPE'] = 'redis'
 # app.config['SESSION_PERMANENT'] = False
 # app.config['SESSION_USE_SIGNER'] = True
-# # app.config['SESSION_FILE_DIR'] = './.flask_session/'
 #  connect to tcp socket via redis://
 # app.config['SESSION_REDIS'] = redis.from_url('redis://localhost:6379/0')
+# # app.config['SESSION_FILE_DIR'] = './.flask_session/'
 app.config['DEBUG'] = os.getenv('FLASK_DEBUG')
 Session(app)
 CORS(app)
@@ -159,7 +159,7 @@ def recognize_track():
 @app.route('/add-to-playlist', methods=['POST'])
 def add_to_playlist(): 
     request_data = request.get_json()
-    print('request data: ', request_data)
+    # print('request data: ', request_data)
     isrc= request_data['isrc']
     playlist_id= request_data['playlist_id']
     print('isrc: ', isrc)
@@ -277,4 +277,4 @@ def get_playlist_url():
 
 if __name__ == '__main__':
     # app.run(debug=True)
-    app.run()
+    app.run(port=os.getenv('PORT'))

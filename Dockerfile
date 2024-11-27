@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1
+# syntax=docker/dockerfile:1.2
 
 # Comments are provided throughout this file to help you get started.
 # If you need more help, visit the Dockerfile reference guide at
@@ -16,11 +16,13 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # the application crashes without emitting any logs due to buffering.
 ENV PYTHONUNBUFFERED=1
 
+
 WORKDIR /app
 
 # Create a non-privileged user that the app will run under.
 # See https://docs.docker.com/go/dockerfile-user-best-practices/
 ARG UID=10001
+
 RUN adduser \
     --disabled-password \
     --gecos "" \
@@ -34,18 +36,24 @@ RUN adduser \
 # Leverage a cache mount to /root/.cache/pip to speed up subsequent builds.
 # Leverage a bind mount to requirements.txt to avoid having to copy them into
 # into this layer.
-RUN --mount=type=cache,target=/root/.cache/pip \
-    --mount=type=bind,source=requirements.txt,target=requirements.txt \
-    python -m pip install -r requirements.txt
+# Copy the source code into the container.
+# COPY requirements.txt .
+COPY . .
+
+# RUN --mount=type=cache,target=/root/.cache/pip \
+#     --mount=type=bind,source=requirements.txt,target=requirements.txt \
+#     python -m pip install -r requirements.txt 
+
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update && apt-get install -y ffmpeg
 
 # Switch to the non-privileged user to run the application.
 USER appuser
 
-# Copy the source code into the container.
-COPY . .
 
 # Expose the port that the application listens on.
-EXPOSE 5000
+EXPOSE 8080
 
 # Run the application.
-CMD gunicorn 'app:app' --bind=0.0.0.0:5000
+CMD gunicorn 'app:app' --bind=0.0.0.0:8080

@@ -115,6 +115,8 @@ $(document).ready(function() {
                 const duration = result['audio_duration'];
                 const audio= result['audio_data'];
                 var trackIds = [];
+
+                console.log(`playlistId: ${playlistId}`);
                 
                 $.recognizeTrack(startTime, duration, audio, playlistId, trackIds).then(function() 
                 {
