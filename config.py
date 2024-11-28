@@ -12,4 +12,4 @@ class BaseConfig(object):
     SESSION_TYPE = os.environ['SESSION_TYPE']
     PERMANENT_SESSION_LIFETIME = timedelta(seconds=int(os.environ['PERMANENT_SESSION_LIFETIME']))
     SESSION_USE_SIGNER = os.environ['SESSION_USE_SIGNER']
-    SESSION_REDIS = redis.from_url(os.environ['SESSION_REDIS']) 
+    # SESSION_REDIS = redis.from_url(os.environ['SESSION_REDIS']) 

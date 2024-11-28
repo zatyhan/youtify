@@ -36,7 +36,7 @@ load_dotenv()
 # app.config['SESSION_PERMANENT'] = False
 # app.config['SESSION_USE_SIGNER'] = True
 #  connect to tcp socket via redis://
-# app.config['SESSION_REDIS'] = redis.from_url('redis://localhost:6379/0')
+app.config['SESSION_REDIS'] = redis_db
 # # app.config['SESSION_FILE_DIR'] = './.flask_session/'
 
 app.config['DEBUG'] = os.getenv('FLASK_DEBUG')
