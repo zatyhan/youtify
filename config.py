@@ -9,6 +9,6 @@ class BaseConfig(object):
     CACHE_REDIS_URL = os.environ['CACHE_REDIS_URL']
     CACHE_DEFAULT_TIMEOUT = os.environ['CACHE_DEFAULT_TIMEOUT']
     SESSION_TYPE = os.environ['SESSION_TYPE']
-    SESSION_PERMANENT = os.environ['SESSION_PERMANENT']
+    PERMANENT_SESSION_LIFETIME = os.environ['PERMANENT_SESSION_LIFETIME']
     SESSION_USE_SIGNER = os.environ['SESSION_USE_SIGNER']
     SESSION_REDIS = redis.from_url(os.environ['SESSION_REDIS'])
