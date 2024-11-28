@@ -23,7 +23,7 @@ import spotipy
 app = Flask(__name__)
 app.config.from_object('config.BaseConfig')
 
-redis_host= os.getenv('REDIS_HOST', 'localhost')
+redis_host= os.getenv('REDISHOST', 'localhost')
 redis_port = int(os.getenv('REDISPORT', 6379))
 
 # if set to localhost, can run on local machine with the redis server running on docker 
