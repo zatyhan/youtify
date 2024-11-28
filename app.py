@@ -23,8 +23,11 @@ import spotipy
 app = Flask(__name__)
 app.config.from_object('config.BaseConfig')
 
+redis_host= os.getenv('REDIS_HOST', 'localhost')
+redis_port = int(os.getenv('REDISPORT', 6379))
+
 # if set to localhost, can run on local machine with the redis server running on docker 
-redis_db = redis.Redis(host='redis', port=6379) 
+redis_db = redis.Redis(host=redis_host, port=redis_port) 
 
 load_dotenv()
 
@@ -35,6 +38,7 @@ load_dotenv()
 #  connect to tcp socket via redis://
 # app.config['SESSION_REDIS'] = redis.from_url('redis://localhost:6379/0')
 # # app.config['SESSION_FILE_DIR'] = './.flask_session/'
+
 app.config['DEBUG'] = os.getenv('FLASK_DEBUG')
 Session(app)
 CORS(app)
