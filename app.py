@@ -34,7 +34,6 @@ load_dotenv()
 # configuring redis
 #  connect to tcp socket via redis://
 app.config['SESSION_REDIS'] = redis_db
-# # app.config['SESSION_FILE_DIR'] = './.flask_session/'
 
 app.config['DEBUG'] = os.getenv('FLASK_DEBUG')
 Session(app)
@@ -44,7 +43,6 @@ app.secret_key= os.getenv('SECRET_KEY')
 
 @app.route('/', methods=['GET','POST'])
 def index():
-    # cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     cache_handler= spotipy.cache_handler.RedisCacheHandler(redis=redis_db, key=os.getenv('REDISAPI_KEY'))
     sp= PlaylistMaker(cache_handler=cache_handler)
 
@@ -64,7 +62,6 @@ def index():
 @app.route('/home', methods=['GET','POST'])
 def home():
 
-    # cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     cache_handler= spotipy.cache_handler.RedisCacheHandler(redis=redis_db, key=os.getenv('REDISAPI_KEY'))
     sp = PlaylistMaker(cache_handler=cache_handler)
     
@@ -78,9 +75,7 @@ def home():
 @app.route('/create-playlist', methods=['POST'])
 def create_playlist():
     request_data= request.get_json()
-    # print(request_data)
     name= urllib.parse.unquote(request_data)
-    # cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     cache_handler= spotipy.cache_handler.RedisCacheHandler(redis=redis_db, key=os.getenv('REDISAPI_KEY'))
     sp = PlaylistMaker(cache_handler=cache_handler)
     try:
@@ -129,7 +124,7 @@ def recognize_track():
         start_time= request_data['start_time']
         buffer= BytesIO(audio_blob)
         buffer.seek(0)
-        shazamapi_key = "20255aac57msh804c236292b3ec2p12abd6jsna3d7d7386a44"
+        shazamapi_key = os.getenv('RAPIDAPI_KEY')
         shazam_endpoint = "https://shazam.p.rapidapi.com/songs/v2/detect"
         querystring = {"timezone":"America/Chicago","locale":"en-US"}
         headers = {
@@ -157,12 +152,10 @@ def recognize_track():
 @app.route('/add-to-playlist', methods=['POST'])
 def add_to_playlist(): 
     request_data = request.get_json()
-    # print('request data: ', request_data)
     isrc= request_data['isrc']
     playlist_id= request_data['playlist_id']
     print('isrc: ', isrc)
-    print('playlist_id: ', playlist_id) 
-    # cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
+    
     cache_handler= spotipy.cache_handler.RedisCacheHandler(redis=redis_db, key=os.getenv('REDISAPI_KEY'))
     sp = PlaylistMaker(cache_handler=cache_handler)
 
@@ -201,7 +194,7 @@ def callback():
 def get_playlist_url():
     request_data = request.get_json()
     playlist_id = request_data['playlist_id']
-    # cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
+    
     cache_handler= spotipy.cache_handler.RedisCacheHandler(redis=redis_db, key=os.getenv('REDISAPI_KEY'))
     sp = PlaylistMaker(cache_handler=cache_handler)
     try:
