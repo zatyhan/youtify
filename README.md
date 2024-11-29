@@ -28,6 +28,6 @@ Currently still in development mode, although it is already up and running [here
 
 3. Run the docker command to build the container and ensure you have your docker dekstop/engine running:
 ```
-docker-compose up --build
+$ docker-compose up --build
 ```
 4. Open your browser and navigate to `http://localhost:yourport/` to access the app.
