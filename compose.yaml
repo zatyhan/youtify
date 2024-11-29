@@ -12,12 +12,20 @@ services:
     image: redis:latest
     restart: always
     container_name: redis
+    environment:
+      - REDISHOST=redis
+      - REDISPORT=6379
     ports: 
       - 6379:6379
 
   server:
     build:
       context: .
+    environment:
+      - SESSION_TYPE=redis
+      - SESSION_USE_SIGNER=True
+      - PERMANENT_SESSION_LIFETIME=3600
+      - SPOTIPY_REDIRECT_URI=${SPOTIPY_REDIRECT_URI}
     env_file: ".env"
     ports:
       - 8080:8080
