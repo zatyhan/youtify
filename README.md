@@ -15,15 +15,23 @@ Currently still in development mode, although it is already up and running [here
 2. Create an .env file with your own [Shazam Rapid API key](https://rapidapi.com/apidojo/api/shazam) and set the Spotify app credentials as below: 
 
    ```
-   SECRET_KEY="yourkey"
-   RAPIDAPI_KEY="yourkey"
-   SPOTIPY_CLIENT_ID="d3eb6ef85c20439d89f4c6b100024b20"
-   SPOTIPY_CLIENT_SECRET="4e00a9fa8ddf46388b293490d3cc5465"
-   SPOTIPY_REDIRECT_URI="http://127.0.0.1"
+   # flask app configuration 
    PORT=yourport
    SESSION_TYPE="redis"
    SESSION_USE_SIGNER="True"
    PERMANENT_SESSION_LIFETIME="3600"
+   # flask secret key for caching 
+   SECRET_KEY="yourkey"
+   # redis host and port for memory caching
+   REDISHOST="redis"
+   REDISPORT="6379"
+   # rapid api key
+   RAPIDAPI_KEY="yourkey"
+   # Spotify app credentials
+   SPOTIPY_CLIENT_ID="d3eb6ef85c20439d89f4c6b100024b20"
+   SPOTIPY_CLIENT_SECRET="4e00a9fa8ddf46388b293490d3cc5465"
+   SPOTIPY_REDIRECT_URI="http://127.0.0.1"
+   
    ```
 
 3. Run the docker command to build the container and ensure you have your docker dekstop/engine running:
