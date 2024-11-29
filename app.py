@@ -32,9 +32,6 @@ redis_db = redis.Redis(host=redis_host, port=redis_port)
 load_dotenv()
 
 # configuring redis
-# app.config['SESSION_TYPE'] = 'redis'
-# app.config['SESSION_PERMANENT'] = False
-# app.config['SESSION_USE_SIGNER'] = True
 #  connect to tcp socket via redis://
 app.config['SESSION_REDIS'] = redis_db
 # # app.config['SESSION_FILE_DIR'] = './.flask_session/'
@@ -111,11 +108,8 @@ def process_url():
     else:
         try:
             yt.streams.filter(only_audio=True).first().stream_to_buffer(buffer)
-
             duration= yt.length
-
             buffer.seek(0)
-
             print('Youtube URL retrieved and processed')
             
             return jsonify({'result': 'Youtube URL retrieved and processed',
@@ -219,66 +213,6 @@ def get_playlist_url():
         playlist_url = sp.get_playlist(playlist_id) 
         return jsonify({'playlist_url': playlist_url}), 200
 
-# @app.route('/recognise')
-# def recognise():
-#     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
-#     sp = PlaylistMaker(cache_handler=cache_handler)
-
-#     try:
-#         sp.create_playlist(session['playlist_name'])
-#         print('Playlist created successfully')
-#     except Exception as e:
-#         print('Failed to create playlist due to error: ', str(e))
-#         session.clear()
-#         return render_template('index.html', auth_status='Failed to create playlist. Please enter the details again.')
-#     else:
-#         print('Retrieving audio from youtube video...')
-
-#         try:
-#             tracks = Processor(session['yt_url'])
-
-#         except Exception as e:
-#             print('Failed to retrieve audio from youtube video due to error: ', str(e))
-
-#         else: 
-#             try: 
-#                 tracks.process_url()
-#                 print('Youtube URL retrieved and processed')
-#             except Exception as e:
-#                 print('Failed to process track due to ', str(e))
-#                 raise SystemExit
-#             else:
-#                 start_time=0
-#                 video_length= tracks.video_length()
-#                 track_ids= set()
-
-#                 while start_time< video_length:
-#                     try:
-#                         print(f"\nFound {len(track_ids)} {'tracks' if len(track_ids)>1 else 'track'}. Recognizing the next track...\n")
-#                         print('\nRecognizing the next track...\n')
-#                         isrc, track_title=  tracks.recognize_audio(start_time=start_time)
-#                         print("Looking for: ", track_title)
-#                         track_id, found_title, duration= sp.lookup(isrc)
-#                         track_ids.add(track_id)
-
-#                         start_time+=duration +5
-
-#                     except KeyboardInterrupt:
-#                         print('The [Ctrl+C] key was pressed. Exiting...')
-#                         raise SystemExit
-                    
-#                     except Exception as e:
-#                         print('Track not found due to error: ', str(e))
-#                         start_time+=60*2.5
-                
-#                 for t in track_ids:
-#                     sp.add_to_playlist(t)
-                
-#                 playlist_url= sp.get_playlist()['external_urls']['spotify']
-#                 return render_template('home.html', auth_status='Authenticated', playlist_url=playlist_url)
-
-#     return 'text'
-
 if __name__ == '__main__':
     # app.run(debug=True)
-    app.run(port=os.getenv('PORT'))
+    app.run(port=os.getenv('PORT', '8080'))
