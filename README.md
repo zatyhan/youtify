@@ -22,9 +22,6 @@ Currently still in development mode, although it is already up and running [here
    PERMANENT_SESSION_LIFETIME="3600"
    # flask secret key for caching 
    SECRET_KEY="yourkey"
-   # redis host and port for memory caching
-   REDISHOST="redis"
-   REDISPORT="6379"
    # rapid api key
    RAPIDAPI_KEY="yourkey"
    # Spotify app credentials
