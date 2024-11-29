@@ -30,7 +30,7 @@ Currently still in development mode, although it is already up and running [here
    # Spotify app credentials
    SPOTIPY_CLIENT_ID="d3eb6ef85c20439d89f4c6b100024b20"
    SPOTIPY_CLIENT_SECRET="4e00a9fa8ddf46388b293490d3cc5465"
-   SPOTIPY_REDIRECT_URI="http://127.0.0.1"
+   SPOTIPY_REDIRECT_URI="http://127.0.0.1:$(PORT)/callback"
    
    ```
 

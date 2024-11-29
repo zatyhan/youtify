@@ -11,8 +11,7 @@ class PlaylistMaker():
         self.__scope__='playlist-modify-public'
         self.__clientID__ = os.getenv('SPOTIPY_CLIENT_ID')
         self.__scope__='playlist-modify-public'
-        self.redirect_uri= os.getenv('SPOTIPY_REDIRECT_URI', "http://127.0.0.1") + ':' + os.getenv('PORT', '8080') + "/callback"
-        self.__auth_manager__ = SpotifyOAuth(client_id=self.__clientID__, redirect_uri=self.redirect_uri, scope=self.__scope__, cache_handler=cache_handler, show_dialog=True)
+        self.__auth_manager__ = SpotifyOAuth(client_id=self.__clientID__, redirect_uri=os.getenv('SPOTIPY_REDIRECT_URI'), scope=self.__scope__, cache_handler=cache_handler, show_dialog=True)
         self.user_id= None
         self.__sp__= None
         self.playlist_id= None
